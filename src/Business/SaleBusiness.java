@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Service;
+package Business;
 
 /**
  *
  * @author lucas.budelon
  */
-public class SaleService {
+public class SaleBusiness {
     
 }

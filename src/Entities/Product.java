@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package Entities;
 
 /**
  *
@@ -12,16 +12,23 @@ package Entity;
 public class Product {
 
     public int Id;
-    public int Code;
+    public String Code;
     public String Name;
     public double Price;
 
     public Product() {
     }
 
-    public Product(int Code, String Name, double Price) {
-        this.Code = Code;
-        this.Name = Name;
-        this.Price = Price;
+    public Product(String code, String name, double price) {
+        this.Code = code;
+        this.Name = name;
+        this.Price = price;
+    }
+    
+    @Override
+    public String toString() {
+        return "Código: " + Code + " | " +
+               "Nome: " + Name + " | " +
+               "Preço: R$ " + Price;
     }
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ConsoleApplication;
+package Utilities;
 
 import java.util.Scanner;
 
@@ -49,31 +49,70 @@ public class ConsoleUI {
         return (scanner.next().charAt(0));
     }
 
-    public static void ShowMenuCRUD(String entity){
-        
-        System.out.println("-- " + entity + " -------------");
+    public static void PrintMessage(String message) {
+        System.out.println(message);
+    }
+    
+    public static void PrintMessageError(String message) {
+        System.err.println(message);
+    }
+
+    public static void ShowMenuCRUD(String entity) {
+
+        System.out.println("-- " + entity + " ------------------------");
         System.out.println("1 - Cadastrar");
         System.out.println("2 - Alterar");
         System.out.println("3 - Excluir");
         System.out.println("4 - Listar");
         System.out.println("5 - Voltar");
-        
+
         PrintLine();
         PrintWhiteSpace();
     }
-    
-    public static void PrintWhiteSpace(){
+
+    public static void PrintWhiteSpace() {
         System.out.println("");
     }
-    
-    public static void PrintLine(){
-        System.out.println("-------------------");
+
+    public static void PrintLine() {
+        System.out.println("---------------------------------");
     }
-    
-    public static void EndApplication(){
+
+    public static void EndApplication() {
         PrintWhiteSpace();
         PrintLine();
-        System.out.println("Fim da aplicação!");  
+        System.out.println("Fim da aplicação!");
         PrintLine();
+    }
+
+    public static void FeedBackCRUD(CRUDPackage CRUDPackage) throws Exception {
+
+        
+
+        if (CRUDPackage.Success) {
+            PrintWhiteSpace();
+            System.out.println(CRUDPackage.Message);
+            PrintWhiteSpace();
+        } else {
+            PrintWhiteSpace();
+            System.err.println(CRUDPackage.Message);
+            PrintWhiteSpace();
+        }
+
+        if (CRUDPackage.HasError) {
+            throw new Exception(CRUDPackage.Message, CRUDPackage.Exception);
+        }
+    }
+
+    public static int RequestOptionMenu() {
+        return scanInt("Informe a opção de menu: ");
+    }
+
+    public static void RequestDataInsert() {
+        System.out.println("Informe os dados para o cadastro");
+    }
+
+    public static void RequestDataUpdate() {
+        System.out.println("Informe os dados para alterar");
     }
 }

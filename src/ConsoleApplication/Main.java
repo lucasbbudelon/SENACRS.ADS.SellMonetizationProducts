@@ -1,5 +1,7 @@
 package ConsoleApplication;
 
+import Utilities.ConsoleUI;
+
 /**
  *
  * @author lucas.budelon
@@ -9,7 +11,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         ShowMenu();
 
@@ -22,12 +24,12 @@ public class Main {
             
             switch (opMenu){
                 case 1:{
-                    AccountConsoleApplication.main(args);
+                    CostomerConsoleApplication.main(args);
                     break;
                 }
                 
                 case 2:{
-                    //BookCRUD.main(args);
+                    ProductConsoleApplication.main(args);
                     break;
                 }
                     
@@ -58,10 +60,11 @@ public class Main {
     private static void ShowMenu(){
         
         System.out.println("-------------------");
-        System.out.println("1 - Conta");
-        System.out.println("2 - Cliente");
-        System.out.println("3 - Produto");
-        System.out.println("4 - Venda");
+        System.out.println("1 - Clientes");
+        System.out.println("2 - Produtos");
+        System.out.println("3 - Operações de monetização");
+        System.out.println("4 - Vendas");
+        System.out.println("5 - Relatórios");
         System.out.println("0 - Finalizar");
         System.out.println("-------------------");
         System.out.println("");

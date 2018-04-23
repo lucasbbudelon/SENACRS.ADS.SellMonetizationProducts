@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package Entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,10 +23,10 @@ public class Sale {
     public Sale() {
     }
 
-    public Sale(String Code, LocalDateTime DateTime, Customer Customer, List<SaleItem> Items) {
-        this.Code = Code;
-        this.DateTime = DateTime;
-        this.Customer = Customer;
-        this.Items = Items;
+    public Sale(String code, LocalDateTime dateTime, Customer customer, List<SaleItem> items) {
+        this.Code = code;
+        this.DateTime = dateTime;
+        this.Customer = customer;
+        this.Items = items;
     }
 }

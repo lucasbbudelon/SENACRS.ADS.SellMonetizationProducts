@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package Entities;
 
 /**
  *
@@ -15,15 +15,26 @@ public class Customer {
     public String CPF;
     public String Name;
     public String Email;
+    public int AccountId;
     public Account Account;
 
     public Customer() {
     }
 
-    public Customer(String CPF, String Name, String Email, Account Account) {
-        this.CPF = CPF;
-        this.Name = Name;
-        this.Email = Email;
-        this.Account = Account;
+    public Customer(String cpf, String name, String email, Account account) {
+        this.CPF = cpf;
+        this.Name = name;
+        this.Email = email;
+        this.Account = account;
     }
+
+    @Override
+    public String toString() {
+        return "CPF: " + CPF + " | " +
+                "Nome: " + Name + " | " +
+                "Email:" + Email+ " | " +
+                Account.toString();
+    }
+    
+    
 }

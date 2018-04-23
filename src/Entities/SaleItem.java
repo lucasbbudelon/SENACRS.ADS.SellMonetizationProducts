@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package Entities;
 
 /**
  *
@@ -17,8 +17,8 @@ public class SaleItem {
     public SaleItem() {
     }
 
-    public SaleItem(Product Product, int Quantity) {
-        this.Product = Product;
-        this.Quantity = Quantity;
+    public SaleItem(Product product, int quantity) {
+        this.Product = product;
+        this.Quantity = quantity;
     }
 }

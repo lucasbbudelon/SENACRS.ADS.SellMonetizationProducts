@@ -5,8 +5,10 @@
  */
 package ConsoleApplication;
 
+import Utilities.ConsoleUI;
 import Entities.Account;
-import Service.AccountService;
+import Business.AccountBusiness;
+import Utilities.CRUDPackage;
 import java.util.ArrayList;
 
 /**
@@ -14,82 +16,101 @@ import java.util.ArrayList;
  * @author lucas.budelon
  */
 public class AccountConsoleApplication {
-    
-    private static final AccountService _service = new AccountService();
-    
-    public static void main(String[] args) {
+
+    private static final AccountBusiness _business = new AccountBusiness();
+
+    public static void main(String[] args) throws Exception {
 
         ConsoleUI.ShowMenuCRUD("Conta");
 
         int opMenu = 0;
-        
+
         do {
-            opMenu = ConsoleApplication.ConsoleUI.scanInt("Informe a opção de menu: ");
-            
-            ConsoleApplication.ConsoleUI.PrintWhiteSpace();
-            
-            switch (opMenu){
-                case 1:{
-                    Save();
+            opMenu = Utilities.ConsoleUI.RequestOptionMenu();
+
+            switch (opMenu) {
+                case 1: {
+                    Insert();
                     break;
                 }
-                case 2:{
-                    Save();
+                case 2: {
+                    Update();
                     break;
                 }
-                case 3:{
+                case 3: {
                     Delete();
                     break;
                 }
-                case 4:{
+                case 4: {
                     List();
                     break;
                 }
-                
-                case 5:{
+
+                case 5: {
                     Main.main(args);
                 }
-                
-                default:{
-                    System.err.println("Opção inválida!");
-                }    
-            }
-            
-            ConsoleApplication.ConsoleUI.ShowMenuCRUD("Conta");
-            
-        } while(opMenu != 5); 
-    }
-    
-    private static void Save(){
-        
-        Account entiti = new Account();
-        
-        System.out.println("== Informe os dados da Conta ==");
 
-        entiti.Number = ConsoleUI.scanString("Número: ");       
-        
-        _service.Save(entiti);
+                default: {
+                    Utilities.ConsoleUI.PrintMessage("Opção inválida!");
+                }
+            }
+
+            Utilities.ConsoleUI.ShowMenuCRUD("Conta");
+
+        } while (opMenu != 5);
     }
-      
-    private static void Delete(){
-        
-        System.out.println("== Informe o número da conta ==");
-        
-        String number = ConsoleUI.scanString("Número: ");
-        
-       _service.Delete(number);
+
+    private static void Insert() throws Exception {
+        Utilities.ConsoleUI.RequestDataInsert();
+        Account entiti = new Account();
+        entiti.Number = ConsoleUI.scanString("Número: ");
+        CRUDPackage result = _business.Insert(entiti);
+        Utilities.ConsoleUI.FeedBackCRUD(result);
     }
-    
-    private static void List(){        
-        ArrayList<Account> list = _service.GetAll();
-        
-        if (list.isEmpty()){
-            System.out.println("Nenhuma conta cadastrada!");
+
+    private static void Update() throws Exception {
+        String number = ConsoleUI.scanString("Número da Conta: ");
+        Account oldEntiti = _business.Get(number);
+
+        if (oldEntiti == null) {
+            Utilities.ConsoleUI.PrintWhiteSpace();
+            Utilities.ConsoleUI.PrintMessageError("Não foi possível alterar pois não foi encontrato conta correspondente ao número " + number);
+            Utilities.ConsoleUI.PrintWhiteSpace();
+            Utilities.ConsoleUI.PrintWhiteSpace();
+        } else {
+            Account newEntiti = new Account();
+            newEntiti.Id = oldEntiti.Id;
+            newEntiti.Balance = oldEntiti.Balance;
+            Utilities.ConsoleUI.RequestDataUpdate();
+            newEntiti.Number = ConsoleUI.scanString("Número: ");
+            CRUDPackage result = _business.Update(newEntiti);
+            Utilities.ConsoleUI.FeedBackCRUD(result);
         }
-        else{
-            list.forEach((c) -> {
-                System.out.println(c.toString());
+    }
+
+    private static void Delete() throws Exception {
+        String number = ConsoleUI.scanString("Número da Conta: ");
+        CRUDPackage result = _business.Delete(number);
+        Utilities.ConsoleUI.FeedBackCRUD(result);
+    }
+
+    private static void List() {
+        ArrayList<Account> list = _business.GetAll();
+
+        if (list.isEmpty()) {
+            Utilities.ConsoleUI.PrintWhiteSpace();
+            Utilities.ConsoleUI.PrintMessage("Nenhuma conta cadastrada!");
+            Utilities.ConsoleUI.PrintWhiteSpace();
+
+        } else {
+
+            Utilities.ConsoleUI.PrintWhiteSpace();
+            Utilities.ConsoleUI.PrintLine();
+            Utilities.ConsoleUI.PrintWhiteSpace();
+            list.forEach((entiti) -> {
+                Utilities.ConsoleUI.PrintMessage(entiti.toString());
             });
-        } 
+            Utilities.ConsoleUI.PrintWhiteSpace();
+        }
     }
 }

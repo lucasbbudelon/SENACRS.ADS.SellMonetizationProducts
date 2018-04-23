@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entity;
+package Entities;
 
 /**
  *
@@ -18,8 +18,19 @@ public class Account {
     public Account() {
     }
 
-    public Account(String Number, double Balance) {
-        this.Number = Number;
-        this.Balance = Balance;
+    public Account(String number) {
+        this.Number = number;
+        this.Balance = 0;
+    }
+    
+    public Account(String number, double balance) {
+        this.Number = number;
+        this.Balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "Conta: " + Number + " | " +
+               "Saldo: R$ " + Balance;
     }
 }
