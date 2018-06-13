@@ -7,15 +7,14 @@ package Business;
 
 import Entities.Account;
 import Entities.Customer;
-import Utilities.CRUDPackage;
+import Utilities.OperationPackage;
 import Repository.CustomerRepository;
-import java.util.ArrayList;
 
 /**
  *
  * @author lucas.budelon
  */
-public class CustomerBusiness {
+public class CustomerBusiness implements IBusiness<Customer> {
 
     private final CustomerRepository _repository;
 
@@ -23,76 +22,95 @@ public class CustomerBusiness {
         _repository = new CustomerRepository();
     }
 
-    public ArrayList<Customer> GetAll() {
+    @Override
+    public OperationPackage GetAll() {
         return _repository.SearchAll();
     }
 
-    public Customer Get(int id) {
-        return _repository.SearchByID(id);
+    @Override
+    public OperationPackage Get(int id) {
+        return _repository.SearchByPK(id);
     }
 
-    public Customer Get(String number) {
-        return _repository.SearchByCPF(number);
+    @Override
+    public OperationPackage Get(String number) {
+        return _repository.SearchByAK(number);
     }
 
-    public CRUDPackage Insert(Customer model) {
+    @Override
+    public OperationPackage Insert(Customer model) {
 
-        Customer searchByCPF = _repository.SearchByCPF(model.CPF);
+        OperationPackage validateDuplicateData = _repository.ValidateDuplicateData(model);
 
-        if (searchByCPF == null) {
-            GenerateAccount(model);
-            return _repository.Insert(model);
+        if (validateDuplicateData.Success) {
+
+            OperationPackage result;
+
+            AccountBusiness accountBusiness = new AccountBusiness();
+
+            String codeAccount = Utilities.Tools.GenerateRandomString(4);
+
+            result = accountBusiness.Insert(new Account(codeAccount));
+
+            if (result.ValidOperation) {
+
+                result = accountBusiness.Get(codeAccount);
+
+                if (result.ValidOperation) {
+
+                    model.Account = (Account) result.Data;
+                    result = _repository.Insert(model);
+
+                }
+            }
+
+            return result;
+
         } else {
-            return new CRUDPackage("Não foi possível cadastrar pois o CPF " + model.CPF + " já está vinculado a outro cliente", false);
+            return validateDuplicateData;
         }
+
     }
 
-    public CRUDPackage Update(Customer model) {
+    @Override
+    public OperationPackage Update(Customer model) {
 
-        Customer searchByCPF = _repository.SearchByCPF(model.CPF);
+        OperationPackage validateDuplicateData = _repository.ValidateDuplicateData(model);
 
-        if (searchByCPF == null) {
+        if (validateDuplicateData.Success) {
             return _repository.Update(model);
         } else {
-            return new CRUDPackage("Não foi possível atualizar pois o CPF " + model.CPF + " já está vinculado a outro cliente", false);
+            return validateDuplicateData;
         }
     }
 
-    public CRUDPackage Delete(int id) {
-        
-         Customer searchById = _repository.SearchByID(id);
-
-        if (searchById == null) {
-            return new CRUDPackage("Não foi possível excluir pois não foi encontrato cliente correspondente ao Id " + id, false);
-        } else {
-            return _repository.Delete(id);
-        }
+    @Override
+    public OperationPackage Delete(int id) {
+        return new OperationPackage("Não é possivel excluir por Id", false);
     }
 
-    public CRUDPackage Delete(String number) {
-        
-        Customer searchByCPF = _repository.SearchByCPF(number);
-        
-        if (searchByCPF == null) {
-            return new CRUDPackage("Não foi possível excluir pois não foi encontrato cliente correspondente ao CPF " + number, false);
+    @Override
+    public OperationPackage Delete(String CPF) {
 
-        } else {
-            return _repository.Delete(searchByCPF.Id);
+        OperationPackage result = _repository.SearchByAK(CPF);
+
+        if (result.ValidOperation) {
+
+            Customer searchByCode = (Customer) result.Data;
+
+            AccountBusiness AccountBusiness = new AccountBusiness();
+
+            result = AccountBusiness.Delete(searchByCode.Account.Id);
+
+            if (result.ValidOperation) {
+                result = _repository.Delete(searchByCode.Id);
+            }
         }
+
+        return result;
     }
-    
-    private void GenerateAccount(Customer customer){
-        
-        Account account = new Account(Utilities.Tools.GenerateRandomString(4));
-        
-        AccountBusiness accountBusiness = new AccountBusiness();
-        CRUDPackage result = accountBusiness.Insert(account);
-        
-        if (!result.Success && !result.HasError ){
-            GenerateAccount(customer);
-        }else{
-            customer.Account = account;
-            customer.AccountId = account.Id;
-        } 
+
+    public OperationPackage ReportSalesByCustomer(String CPF) {
+        return _repository.ReportSalesByCustomer(CPF);
     }
 }

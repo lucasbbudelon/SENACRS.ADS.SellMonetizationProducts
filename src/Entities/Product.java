@@ -6,17 +6,40 @@
 package Entities;
 
 /**
+ * Product Registration
  *
  * @author lucas.budelon
  */
 public class Product {
 
+    /**
+     * Unique identifier
+     */
     public int Id;
+
+    /**
+     * Product Identifier
+     */
     public String Code;
+
+    /**
+     * Product Name
+     */
     public String Name;
+
+    /**
+     * Product value
+     */
     public double Price;
 
     public Product() {
+    }
+
+    public Product(int Id, String code, String name, double price) {
+        this.Id = Id;
+        this.Code = code;
+        this.Name = name;
+        this.Price = price;
     }
 
     public Product(String code, String name, double price) {
@@ -24,11 +47,11 @@ public class Product {
         this.Name = name;
         this.Price = price;
     }
-    
+
     @Override
     public String toString() {
-        return "Código: " + Code + " | " +
-               "Nome: " + Name + " | " +
-               "Preço: R$ " + Price;
+        return "Código: " + Code + " | "
+                + "Nome: " + Name + " | "
+                + "Preço: R$ " + Price;
     }
 }

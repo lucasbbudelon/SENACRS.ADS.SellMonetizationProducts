@@ -6,13 +6,24 @@
 package Entities;
 
 /**
- *
+ * Account registration
  * @author lucasbbudelon
  */
 public class Account {
 
+    /**
+     * Unique identifier
+     */
     public int Id;
+    
+    /**
+     * Account Identifier
+     */
     public String Number;
+    
+    /**
+     * Current balance
+     */
     public double Balance;
 
     public Account() {
@@ -27,7 +38,7 @@ public class Account {
         this.Number = number;
         this.Balance = balance;
     }
-
+    
     @Override
     public String toString() {
         return "Conta: " + Number + " | " +

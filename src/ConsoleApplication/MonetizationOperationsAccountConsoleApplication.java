@@ -5,23 +5,35 @@
  */
 package ConsoleApplication;
 
-import Utilities.ConsoleUI;
-import Entities.Account;
 import Business.AccountBusiness;
-import Utilities.CRUDPackage;
-import java.util.ArrayList;
+import Business.CustomerBusiness;
+import Entities.Customer;
+import Utilities.OperationPackage;
 
 /**
  *
  * @author lucas.budelon
  */
-public class AccountConsoleApplication {
+public class MonetizationOperationsAccountConsoleApplication {
 
-    private static final AccountBusiness _business = new AccountBusiness();
+    private static final AccountBusiness _accountBusiness = new AccountBusiness();
+    private static final CustomerBusiness _customerBusiness = new CustomerBusiness();
+
+    private static void ShowMenu() {
+        System.out.println("-- MOVIMENTAR CONTA ------------------------");
+        System.out.println("1 - Depositar");
+        System.out.println("2 - Sacar");
+        System.out.println("3 - Transferência");
+        System.out.println("4 - Saldo");
+        System.out.println("0 - Voltar");
+
+        Utilities.ConsoleUI.PrintLine();
+        Utilities.ConsoleUI.PrintWhiteSpace();
+    }
 
     public static void main(String[] args) throws Exception {
 
-        ConsoleUI.ShowMenuCRUD("Conta");
+        ShowMenu();
 
         int opMenu = 0;
 
@@ -30,23 +42,23 @@ public class AccountConsoleApplication {
 
             switch (opMenu) {
                 case 1: {
-                    Insert();
+                    Deposit();
                     break;
                 }
                 case 2: {
-                    Update();
+                    Withdrawal();
                     break;
                 }
                 case 3: {
-                    Delete();
+                    Transfer();
                     break;
                 }
                 case 4: {
-                    List();
+                    Balance();
                     break;
                 }
 
-                case 5: {
+                case 0: {
                     Main.main(args);
                 }
 
@@ -55,61 +67,48 @@ public class AccountConsoleApplication {
                 }
             }
 
-            Utilities.ConsoleUI.ShowMenuCRUD("Conta");
+            ShowMenu();
 
-        } while (opMenu != 5);
+        } while (opMenu != 0);
     }
 
-    private static void Insert() throws Exception {
-        Utilities.ConsoleUI.RequestDataInsert();
-        Account entiti = new Account();
-        entiti.Number = ConsoleUI.scanString("Número: ");
-        CRUDPackage result = _business.Insert(entiti);
+    private static void Deposit() throws Exception {
+        String CPF = Utilities.ConsoleUI.scanString("Informe o CPF do cliente cujo conta receberá o depósito: ");
+        double value = Utilities.ConsoleUI.scanDouble("Informe o valor: ");
+        OperationPackage result = _accountBusiness.Deposit(CPF, value);
         Utilities.ConsoleUI.FeedBackCRUD(result);
+        PrintBalance(CPF);
     }
 
-    private static void Update() throws Exception {
-        String number = ConsoleUI.scanString("Número da Conta: ");
-        Account oldEntiti = _business.Get(number);
-
-        if (oldEntiti == null) {
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintMessageError("Não foi possível alterar pois não foi encontrato conta correspondente ao número " + number);
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintWhiteSpace();
-        } else {
-            Account newEntiti = new Account();
-            newEntiti.Id = oldEntiti.Id;
-            newEntiti.Balance = oldEntiti.Balance;
-            Utilities.ConsoleUI.RequestDataUpdate();
-            newEntiti.Number = ConsoleUI.scanString("Número: ");
-            CRUDPackage result = _business.Update(newEntiti);
-            Utilities.ConsoleUI.FeedBackCRUD(result);
-        }
-    }
-
-    private static void Delete() throws Exception {
-        String number = ConsoleUI.scanString("Número da Conta: ");
-        CRUDPackage result = _business.Delete(number);
+    private static void Withdrawal() throws Exception {
+        String CPF = Utilities.ConsoleUI.scanString("Informe o CPF do cliente cujo conta receberá o saque: ");
+        double value = Utilities.ConsoleUI.scanDouble("Informe o valor: ");
+        OperationPackage result = _accountBusiness.Withdrawal(CPF, value);
         Utilities.ConsoleUI.FeedBackCRUD(result);
+        PrintBalance(CPF);
     }
 
-    private static void List() {
-        ArrayList<Account> list = _business.GetAll();
+    private static void Transfer() throws Exception {
+        String CPFOrigen = Utilities.ConsoleUI.scanString("Informe o CPF do cliente cujo conta será retirado o valor: ");
+        String CPFDestiny = Utilities.ConsoleUI.scanString("Informe o CPF do cliente cujo conta receberá o valor: ");
+        double value = Utilities.ConsoleUI.scanDouble("Informe o valor: ");
+        OperationPackage result = _accountBusiness.Transfer(CPFOrigen, CPFDestiny, value);
+        Utilities.ConsoleUI.FeedBackCRUD(result);
+        PrintBalance(CPFOrigen);
+        PrintBalance(CPFDestiny);
+    }
 
-        if (list.isEmpty()) {
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintMessage("Nenhuma conta cadastrada!");
-            Utilities.ConsoleUI.PrintWhiteSpace();
+    private static void Balance() {
+        String CPF = Utilities.ConsoleUI.scanString("Informe o CPF do cliente para consultar saldo: ");
+        PrintBalance(CPF); 
+    }
+    
+    private static void PrintBalance(String CPF) {
 
-        } else {
-
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintLine();
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            list.forEach((entiti) -> {
-                Utilities.ConsoleUI.PrintMessage(entiti.toString());
-            });
+        OperationPackage searchByCPF = _customerBusiness.Get(CPF);
+        
+        if (searchByCPF.ValidOperation) {
+            Utilities.ConsoleUI.PrintMessage(((Customer)searchByCPF.Data).GetAccountBalance());
             Utilities.ConsoleUI.PrintWhiteSpace();
         }
     }

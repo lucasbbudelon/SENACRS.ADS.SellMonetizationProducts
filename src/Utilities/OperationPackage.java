@@ -9,29 +9,52 @@ package Utilities;
  *
  * @author lucas.budelon
  */
-public class CRUDPackage {
+public class OperationPackage<T> {
 
     public String Message;
     public boolean HasError;
     public boolean Success;
+    public boolean ValidOperation;
     public Exception Exception;
+    public T Data;
 
-    public CRUDPackage() {
+    public OperationPackage() {
         HasError = false;
         Exception = null;
+        Data = null;
     }
-    
-    public CRUDPackage(String message, boolean success) {
+
+    public OperationPackage(String message, boolean success) {
         Message = message;
         Success = success;
         HasError = false;
+        ValidOperation = success;
         Exception = null;
     }
-    
-    public CRUDPackage(String message, Exception exception) {
+
+    public OperationPackage(String message, Exception exception) {
         Message = message;
         Success = false;
         HasError = true;
+        ValidOperation = false;
         Exception = exception;
+    }
+
+    public OperationPackage(String message, boolean success, T entiti) {
+        Message = message;
+        Success = success;
+        HasError = false;
+        ValidOperation = success;
+        Exception = null;
+        Data = entiti;
+    }
+
+    public OperationPackage(String message, Exception exception, T entiti) {
+        Message = message;
+        Success = false;
+        HasError = true;
+        ValidOperation = false;
+        Exception = exception;
+        Data = entiti;
     }
 }

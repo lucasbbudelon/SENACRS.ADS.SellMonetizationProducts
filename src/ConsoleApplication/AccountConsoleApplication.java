@@ -8,7 +8,7 @@ package ConsoleApplication;
 import Utilities.ConsoleUI;
 import Entities.Account;
 import Business.AccountBusiness;
-import Utilities.CRUDPackage;
+import Utilities.OperationPackage;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +21,7 @@ public class AccountConsoleApplication {
 
     public static void main(String[] args) throws Exception {
 
-        ConsoleUI.ShowMenuCRUD("Conta");
+        ConsoleUI.ShowMenuCRUD("CONTA");
 
         int opMenu = 0;
 
@@ -45,8 +45,8 @@ public class AccountConsoleApplication {
                     List();
                     break;
                 }
-
-                case 5: {
+                
+                case 0: {
                     Main.main(args);
                 }
 
@@ -55,62 +55,67 @@ public class AccountConsoleApplication {
                 }
             }
 
-            Utilities.ConsoleUI.ShowMenuCRUD("Conta");
+            Utilities.ConsoleUI.ShowMenuCRUD("CONTA");
 
-        } while (opMenu != 5);
+        } while (opMenu != 0);
     }
 
     private static void Insert() throws Exception {
         Utilities.ConsoleUI.RequestDataInsert();
         Account entiti = new Account();
         entiti.Number = ConsoleUI.scanString("Número: ");
-        CRUDPackage result = _business.Insert(entiti);
+        OperationPackage result = _business.Insert(entiti);
         Utilities.ConsoleUI.FeedBackCRUD(result);
     }
 
     private static void Update() throws Exception {
         String number = ConsoleUI.scanString("Número da Conta: ");
-        Account oldEntiti = _business.Get(number);
-
-        if (oldEntiti == null) {
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintMessageError("Não foi possível alterar pois não foi encontrato conta correspondente ao número " + number);
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintWhiteSpace();
-        } else {
+        OperationPackage searchByNumber = _business.Get(number);
+        
+        if (searchByNumber.ValidOperation) {
             Account newEntiti = new Account();
-            newEntiti.Id = oldEntiti.Id;
-            newEntiti.Balance = oldEntiti.Balance;
+            newEntiti.Id = ((Account) searchByNumber.Data).Id;
+            newEntiti.Balance = ((Account) searchByNumber.Data).Balance;
             Utilities.ConsoleUI.RequestDataUpdate();
             newEntiti.Number = ConsoleUI.scanString("Número: ");
-            CRUDPackage result = _business.Update(newEntiti);
+            OperationPackage result = _business.Update(newEntiti);
             Utilities.ConsoleUI.FeedBackCRUD(result);
+        } else {
+            Utilities.ConsoleUI.FeedBackCRUD(searchByNumber);
         }
     }
 
     private static void Delete() throws Exception {
         String number = ConsoleUI.scanString("Número da Conta: ");
-        CRUDPackage result = _business.Delete(number);
+        OperationPackage result = _business.Delete(number);
         Utilities.ConsoleUI.FeedBackCRUD(result);
     }
 
-    private static void List() {
-        ArrayList<Account> list = _business.GetAll();
+ private static void List() throws Exception {
 
-        if (list.isEmpty()) {
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintMessage("Nenhuma conta cadastrada!");
-            Utilities.ConsoleUI.PrintWhiteSpace();
+        OperationPackage getAll = _business.GetAll();
 
+        if (getAll.ValidOperation) {
+
+            ArrayList<Account> list = (ArrayList<Account>) getAll.Data;
+
+            if (list.isEmpty()) {
+                Utilities.ConsoleUI.PrintWhiteSpace();
+                Utilities.ConsoleUI.PrintMessage("Nenhuma conta cadastrada!");
+                Utilities.ConsoleUI.PrintWhiteSpace();
+
+            } else {
+
+                Utilities.ConsoleUI.PrintWhiteSpace();
+                Utilities.ConsoleUI.PrintLine();
+                Utilities.ConsoleUI.PrintWhiteSpace();
+                list.forEach((entiti) -> {
+                    Utilities.ConsoleUI.PrintMessage(entiti.toString());
+                });
+                Utilities.ConsoleUI.PrintWhiteSpace();
+            }
         } else {
-
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            Utilities.ConsoleUI.PrintLine();
-            Utilities.ConsoleUI.PrintWhiteSpace();
-            list.forEach((entiti) -> {
-                Utilities.ConsoleUI.PrintMessage(entiti.toString());
-            });
-            Utilities.ConsoleUI.PrintWhiteSpace();
+            Utilities.ConsoleUI.FeedBackCRUD(getAll);
         }
     }
 }

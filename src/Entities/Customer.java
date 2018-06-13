@@ -6,16 +6,35 @@
 package Entities;
 
 /**
+ * Customer registration
  *
  * @author lucas.budelon
  */
 public class Customer {
 
+    /**
+     * Unique identifier
+     */
     public int Id;
+
+    /**
+     * Individual identifier
+     */
     public String CPF;
+
+    /**
+     * Customer name
+     */
     public String Name;
+
+    /**
+     * Customer Email
+     */
     public String Email;
-    public int AccountId;
+
+    /**
+     * Associated account
+     */
     public Account Account;
 
     public Customer() {
@@ -28,13 +47,19 @@ public class Customer {
         this.Account = account;
     }
 
+    public String GetAccountBalance() {
+        return "Cliente: " + Name + " | "
+                + "CPF: " + CPF + " | "
+                + "Conta: " + Account.Number + " | "
+                + "Saldo: R$" + Account.Balance;
+    }
+
     @Override
     public String toString() {
-        return "CPF: " + CPF + " | " +
-                "Nome: " + Name + " | " +
-                "Email:" + Email+ " | " +
-                Account.toString();
+        return "CPF: " + CPF + " | "
+                + "Nome: " + Name + " | "
+                + "Email:" + Email + " | "
+                + Account.toString();
     }
-    
-    
+
 }

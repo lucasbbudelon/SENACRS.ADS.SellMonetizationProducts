@@ -6,15 +6,14 @@
 package Business;
 
 import Entities.Product;
-import Utilities.CRUDPackage;
+import Utilities.OperationPackage;
 import Repository.ProductRepository;
-import java.util.ArrayList;
 
 /**
  *
  * @author lucas.budelon
  */
-public class ProductBusiness {
+public class ProductBusiness implements IBusiness<Product>{
 
     private final ProductRepository _repository;
 
@@ -22,60 +21,72 @@ public class ProductBusiness {
         _repository = new ProductRepository();
     }
 
-    public ArrayList<Product> GetAll() {
+    /*
+     * Returns all records
+     * @author Lucas B Budelon
+     * @return ArrayList
+     */
+    @Override
+    public OperationPackage GetAll() {
         return _repository.SearchAll();
     }
 
-    public Product Get(int id) {
-        return _repository.SearchByID(id);
+    @Override
+    public OperationPackage Get(int id) {
+        return _repository.SearchByPK(id);
     }
 
-    public Product Get(String code) {
-        return _repository.SearchByCode(code);
+    @Override
+    public OperationPackage Get(String code) {
+        return _repository.SearchByAK(code);
     }
 
-    public CRUDPackage Insert(Product model) {
+    @Override
+    public OperationPackage Insert(Product model) {
+        
+        OperationPackage validateDuplicateData = _repository.ValidateDuplicateData(model);
 
-        Product searchByCode = _repository.SearchByCode(model.Code);
-
-        if (searchByCode == null) {
+        if (validateDuplicateData.Success) {
             return _repository.Insert(model);
         } else {
-            return new CRUDPackage("Não foi possível cadastrar pois o código " + model.Code + " já está vinculado a outra produto", false);
+            return validateDuplicateData;
         }
+        
     }
 
-    public CRUDPackage Update(Product model) {
+    @Override
+    public OperationPackage Update(Product model) {
+        
+        OperationPackage validateDuplicateData = _repository.ValidateDuplicateData(model);
 
-        Product searchByCode = _repository.SearchByCode(model.Code);
-
-        if (searchByCode == null) {
+        if (validateDuplicateData.Success) {
             return _repository.Update(model);
         } else {
-            return new CRUDPackage("Não foi possível atualizar pois o código " + model.Code + " já está vinculado a outra produto", false);
+            return validateDuplicateData;
         }
     }
 
-    public CRUDPackage Delete(int id) {
-
-        Product searchById = _repository.SearchByID(id);
-
-        if (searchById == null) {
-            return new CRUDPackage("Não foi possível excluir pois não foi encontrato produto correspondente ao Id " + id, false);
-        } else {
-            return _repository.Delete(id);
-        }
+    @Override
+    public OperationPackage Delete(int id) {
+        return _repository.Delete(id);
     }
 
-    public CRUDPackage Delete(String code) {
+    @Override
+    public OperationPackage Delete(String code) {
 
-        Product searchByCode = _repository.SearchByCode(code);
+        OperationPackage resultSearchByCode = _repository.SearchByAK(code);
 
-        if (searchByCode == null) {
-            return new CRUDPackage("Não foi possível excluir pois não foi encontrato produto correspondente ao código " + code, false);
+        if (!resultSearchByCode.HasError && resultSearchByCode.Success) {
 
-        } else {
+            Product searchByCode = (Product) resultSearchByCode.Data;
             return _repository.Delete(searchByCode.Id);
+
+        } else {
+            return resultSearchByCode;
         }
+    }
+    
+    public OperationPackage ReportProductsSold() {
+        return _repository.ReportProductsSold();
     }
 }

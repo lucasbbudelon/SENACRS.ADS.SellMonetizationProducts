@@ -6,91 +6,85 @@
 package Business;
 
 import Entities.Account;
-import Utilities.CRUDPackage;
+import Entities.Customer;
+import Entities.Sale;
+import Utilities.OperationPackage;
 import Repository.AccountRepository;
-import java.util.ArrayList;
+import Repository.CustomerRepository;
 
 /**
  *
  * @author lucas.budelon
  */
-public class AccountBusiness {
+public class AccountBusiness implements IBusiness<Account> {
 
     private final AccountRepository _repository;
+    private final CustomerRepository _customerRepository;
 
     public AccountBusiness() {
         _repository = new AccountRepository();
+        _customerRepository = new CustomerRepository();
     }
 
-    public ArrayList<Account> GetAll() {
+    @Override
+    public OperationPackage GetAll() {
         return _repository.SearchAll();
     }
 
-    public Account Get(int id) {
-        return _repository.SearchByID(id);
+    @Override
+    public OperationPackage Get(int id) {
+        return _repository.SearchByPK(id);
     }
 
-    public Account Get(String number) {
-        return _repository.SearchByNumber(number);
+    @Override
+    public OperationPackage Get(String number) {
+        return _repository.SearchByAK(number);
     }
 
-    public CRUDPackage Insert(Account model) {
+    @Override
+    public OperationPackage Insert(Account model) {
+        
+        OperationPackage validateDuplicateData = _repository.ValidateDuplicateData(model);
 
-        Account searchByNumber = _repository.SearchByNumber(model.Number);
-
-        if (searchByNumber == null) {
+        if (validateDuplicateData.Success) {
             return _repository.Insert(model);
         } else {
-            return new CRUDPackage("Não foi possível cadastrar pois o número " + model.Number + " já está vinculado a outra conta", false);
+            return validateDuplicateData;
         }
     }
 
-    public CRUDPackage Update(Account model) {
+    @Override
+    public OperationPackage Update(Account model) {
+        
+        OperationPackage validateDuplicateData = _repository.ValidateDuplicateData(model);
 
-        Account searchByNumber = _repository.SearchByNumber(model.Number);
-
-        if (searchByNumber == null) {
+        if (validateDuplicateData.Success) {
             return _repository.Update(model);
         } else {
-            return new CRUDPackage("Não foi possível atualizar pois o número " + model.Number + " já está vinculado a outra conta", false);
+            return validateDuplicateData;
         }
     }
 
-    public CRUDPackage Delete(int id) {
-
-        Account searchById = _repository.SearchByID(id);
-
-        if (searchById == null) {
-            return new CRUDPackage("Não foi possível excluir pois não foi encontrato conta correspondente ao Id " + id, false);
-        } else {
-            return _repository.Delete(id);
-        }
+    @Override
+    public OperationPackage Delete(int id) {
+        return _repository.Delete(id);
     }
 
-    public CRUDPackage Delete(String number) {
-
-        Account searchByNumber = _repository.SearchByNumber(number);
-
-        if (searchByNumber == null) {
-            return new CRUDPackage("Não foi possível excluir pois não foi encontrato conta correspondente ao número " + number, false);
-
-        } else {
-            return _repository.Delete(searchByNumber.Id);
-        }
+    @Override
+    public OperationPackage Delete(String code) {
+        return new OperationPackage("Não é possivel excluir pelo Código", false);
     }
 
-    public CRUDPackage Deposit(int id, double value) {
+    public OperationPackage Deposit(String CPF, double value) {
 
-        CRUDPackage packageReturn = new CRUDPackage();
+        OperationPackage packageReturn = _customerRepository.SearchByAK(CPF);
 
-        Account account = _repository.SearchByID(id);
+        if (packageReturn.ValidOperation) {
 
-        if (account == null) {
-            packageReturn.Message = "Não foi possível efetuar o depósito pois não foi encontrato conta correspondente ao Id " + id;
-            packageReturn.Success = false;
-        } else {
-            account.Balance += value;
-            CRUDPackage update = _repository.Update(account);
+            Customer customer = (Customer) packageReturn.Data;
+            customer.Account.Balance += value;
+
+            OperationPackage update = _repository.Update(customer.Account);
 
             if (update.HasError || !update.Success) {
                 packageReturn = update;
@@ -103,38 +97,39 @@ public class AccountBusiness {
         return packageReturn;
     }
 
-    public CRUDPackage Withdrawal(int id, double value) {
+    public OperationPackage Withdrawal(String CPF, double value) {
 
-        CRUDPackage packageReturn = new CRUDPackage();
+        OperationPackage packageReturn = _customerRepository.SearchByAK(CPF);
 
-        Account account = _repository.SearchByID(id);
+        if (packageReturn.ValidOperation) {
 
-        if (account == null) {
-            packageReturn.Message = "Não foi possível efetuar o depósito pois não foi encontrato conta correspondente ao Id " + id;
-            packageReturn.Success = false;
-        } else if (value > account.Balance) {
-            packageReturn.Message = "Não foi possível efetuar o saque pois não há saldo suficiente na conta";
-            packageReturn.Success = false;
-        } else {
-            account.Balance -= value;
-            CRUDPackage update = _repository.Update(account);
+            Customer customer = (Customer) packageReturn.Data;
 
-            if (update.HasError || !update.Success) {
-                packageReturn = update;
+            if (value > customer.Account.Balance) {
+                packageReturn.Message = "Não foi possível efetuar o débito pois não há saldo suficiente na conta";
+                packageReturn.Success = false;
             } else {
-                packageReturn.Message = "Saque realizado com sucesso!";
-                packageReturn.Success = true;
+                customer.Account.Balance -= value;
+                OperationPackage update = _repository.Update(customer.Account);
+
+                if (update.HasError || !update.Success) {
+                    packageReturn = update;
+                } else {
+                    packageReturn.Message = "Saque realizado com sucesso!";
+                    packageReturn.Success = true;
+                }
             }
         }
 
         return packageReturn;
+
     }
 
-    public CRUDPackage Transfer(int idOrigin, int idDestiny, double value) {
+    public OperationPackage Transfer(String CPFOrigin, String CPFDestiny, double value) {
 
-        CRUDPackage packageReturn = new CRUDPackage();
-        CRUDPackage withdrawalOrigin = Withdrawal(idOrigin, value);
-        CRUDPackage depositDestiny = Deposit(idDestiny, value);
+        OperationPackage packageReturn = new OperationPackage();
+        OperationPackage withdrawalOrigin = Withdrawal(CPFOrigin, value);
+        OperationPackage depositDestiny = Deposit(CPFDestiny, value);
 
         if (withdrawalOrigin.HasError || !withdrawalOrigin.Success) {
             return withdrawalOrigin;
@@ -146,4 +141,8 @@ public class AccountBusiness {
             return packageReturn;
         }
     }
+
+//    public OperationPackage DebitSale(Sale sale) {
+//        return (Withdrawal(sale.Customer.CPF, sale.GetTotal()));
+//    }
 }
