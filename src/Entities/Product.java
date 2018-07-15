@@ -15,43 +15,75 @@ public class Product {
     /**
      * Unique identifier
      */
-    public int Id;
+    private int id;
 
     /**
      * Product Identifier
      */
-    public String Code;
+    private String code;
 
     /**
-     * Product Name
+     * Product name
      */
-    public String Name;
+    private String name;
 
     /**
      * Product value
      */
-    public double Price;
+    private double price;
+
+    public void setId(int Id) {
+        this.id = Id;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 
     public Product() {
     }
 
-    public Product(int Id, String code, String name, double price) {
-        this.Id = Id;
-        this.Code = code;
-        this.Name = name;
-        this.Price = price;
+    public Product(int id, String code, String name, double price) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.price = price;
     }
 
     public Product(String code, String name, double price) {
-        this.Code = code;
-        this.Name = name;
-        this.Price = price;
+        this.code = code;
+        this.name = name;
+        this.price = price;
     }
 
     @Override
     public String toString() {
-        return "Código: " + Code + " | "
-                + "Nome: " + Name + " | "
-                + "Preço: R$ " + Price;
+        return "Código: " + code + " | "
+                + "Nome: " + name + " | "
+                + "Preço: R$ " + price;
     }
 }

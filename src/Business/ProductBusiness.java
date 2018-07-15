@@ -79,7 +79,7 @@ public class ProductBusiness implements IBusiness<Product>{
         if (!resultSearchByCode.HasError && resultSearchByCode.Success) {
 
             Product searchByCode = (Product) resultSearchByCode.Data;
-            return _repository.Delete(searchByCode.Id);
+            return _repository.Delete(searchByCode.getId());
 
         } else {
             return resultSearchByCode;

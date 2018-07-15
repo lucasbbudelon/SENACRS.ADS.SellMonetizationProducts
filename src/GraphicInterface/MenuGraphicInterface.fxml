@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+
+<AnchorPane fx:id="panelMenu" prefHeight="200.0" prefWidth="350.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.MenuGraphicInterface">
+    <children>
+        <Button layoutX="10.0" layoutY="10" onAction="#showCustomerGraphicInterfaceList" text="Clientes" />
+        <Button layoutX="75.0" layoutY="10" onAction="#showProductGraphicInterfaceList" text="Produtos" />
+        <Button layoutX="145.0" layoutY="10" onAction="#showMoveAccount" text="Movimentar Conta" />
+        <Button layoutX="265.0" layoutY="10" onAction="#showSales" text="Vendas" />
+    </children>
+</AnchorPane>

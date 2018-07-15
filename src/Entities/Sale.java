@@ -64,7 +64,7 @@ public class Sale {
     public String GetItems() {
         String items = "";
         for (SaleItem item : Items) {
-            items += item.Product.Name + "(" + item.Quantity + "), ";
+            items += item.Product.getName() + "(" + item.Quantity + "), ";
         }
         return items;
     }
@@ -72,7 +72,7 @@ public class Sale {
     public double GetTotal() {
         double totalSale = 0;
         totalSale = Items.stream()
-                .map((item) -> item.Product.Price * item.Quantity)
+                .map((item) -> item.Product.getPrice() * item.Quantity)
                 .reduce(totalSale, (accumulator, _item) -> accumulator + _item);
         return totalSale;
     }

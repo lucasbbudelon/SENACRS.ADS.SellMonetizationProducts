@@ -85,7 +85,7 @@ public class SaleBusiness implements IBusiness<Sale> {
                             if (resultItemsSale.ValidOperation) {
 
                                 resultItemsSale = accountBusiness
-                                        .Withdrawal(model.Customer.CPF, saleItem.Product.Price * saleItem.Quantity);
+                                        .Withdrawal(model.Customer.CPF, saleItem.Product.getPrice() * saleItem.Quantity);
 
                                 if (!resultItemsSale.ValidOperation) {
                                     return resultItemsSale;

@@ -120,7 +120,7 @@ public class SaleConsoleApplication {
                 case 2: {
                     boolean removeSuccess = false;
                     String code = ConsoleUI.scanString("Código do Produto: ");
-                    entiti.Items.stream().filter((item) -> (item.Product.Code.equals(code))).forEachOrdered((item) -> {
+                    entiti.Items.stream().filter((item) -> (item.Product.getCode().equals(code))).forEachOrdered((item) -> {
                         entiti.Items.remove(item);
                     });
                     if (removeSuccess) {

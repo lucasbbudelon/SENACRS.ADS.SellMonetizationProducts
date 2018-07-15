@@ -43,9 +43,9 @@ public class ProductRepository implements IRepository<Product> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Code);
-                comand.setString(2, model.Name);
-                comand.setDouble(3, model.Price);
+                comand.setString(1, model.getCode());
+                comand.setString(2, model.getName());
+                comand.setDouble(3, model.getPrice());
 
                 int executeResult = comand.executeUpdate();
 
@@ -89,10 +89,10 @@ public class ProductRepository implements IRepository<Product> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Code);
-                comand.setString(2, model.Name);
-                comand.setDouble(3, model.Price);
-                comand.setInt(4, model.Id);
+                comand.setString(1, model.getCode());
+                comand.setString(2, model.getName());
+                comand.setDouble(3, model.getPrice());
+                comand.setInt(4, model.getId());
 
                 int executeResult = comand.executeUpdate();
 
@@ -184,10 +184,10 @@ public class ProductRepository implements IRepository<Product> {
 
                     Product entiti = new Product();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Name = executeResult.getString("Name");
-                    entiti.Price = executeResult.getDouble("Price");
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setName(executeResult.getString("Name")); 
+                    entiti.setPrice(executeResult.getDouble("Price"));
 
                     connection.close();
 
@@ -242,10 +242,10 @@ public class ProductRepository implements IRepository<Product> {
 
                     Product entiti = new Product();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Name = executeResult.getString("Name");
-                    entiti.Price = executeResult.getDouble("Price");
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setName(executeResult.getString("Name")); 
+                    entiti.setPrice(executeResult.getDouble("Price"));
 
                     connection.close();
 
@@ -299,10 +299,10 @@ public class ProductRepository implements IRepository<Product> {
 
                     Product entiti = new Product();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Name = executeResult.getString("Name");
-                    entiti.Price = executeResult.getDouble("Price");
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setName(executeResult.getString("Name")); 
+                    entiti.setPrice(executeResult.getDouble("Price"));
 
                     list.add(entiti);
                 }
@@ -336,13 +336,11 @@ public class ProductRepository implements IRepository<Product> {
                 Connection connection = (Connection) resultOperation.Data;
 
                 String sql = "SELECT * FROM Product "
-                        + "WHERE Code LIKE ?"
-                        + "OR Name LIKE ?";
+                        + "WHERE Name = ?";
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, "%" + model.Code + "%");
-                comand.setString(2, "%" + model.Name + "%");
+                comand.setString(1, model.getName());
 
                 ResultSet executeResult = comand.executeQuery();
 
@@ -350,7 +348,7 @@ public class ProductRepository implements IRepository<Product> {
 
                     connection.close();
                     resultOperation = new OperationPackage(
-                            "Dados Inválidos!",
+                            "Já existe outro produto cadastrado com esse nome!",
                             false);
 
                 } else {
@@ -362,7 +360,7 @@ public class ProductRepository implements IRepository<Product> {
                 }
             } catch (SQLException ex) {
                 resultOperation = new OperationPackage(
-                        "Não foi possível validas os dados!",
+                        "Não foi possível validar os dados!",
                         false,
                         ex);
             }

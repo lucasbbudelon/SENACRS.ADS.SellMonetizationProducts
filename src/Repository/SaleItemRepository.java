@@ -47,7 +47,7 @@ public class SaleItemRepository {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setInt(1, model.Product.Id);
+                comand.setInt(1, model.Product.getId());
                 comand.setInt(2, model.Quantity);
                 comand.setInt(3, saleId);
 
