@@ -50,7 +50,7 @@ public class SaleRepository implements IRepository<Sale> {
 
                 comand.setString(1, model.Code);
                 comand.setDate(2, java.sql.Date.valueOf(model.Date));
-                comand.setInt(3, model.Customer.Id);
+                comand.setInt(3, model.Customer.getId());
 
                 int executeResult = comand.executeUpdate();
 
@@ -96,7 +96,7 @@ public class SaleRepository implements IRepository<Sale> {
 
                 comand.setString(1, model.Code);
                 comand.setDate(2, java.sql.Date.valueOf(model.Date));
-                comand.setInt(3, model.Customer.Id);
+                comand.setInt(3, model.Customer.getId());
                 comand.setInt(4, model.Id);
 
                 int executeResult = comand.executeUpdate();

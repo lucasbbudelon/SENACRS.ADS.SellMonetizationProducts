@@ -12,54 +12,100 @@ package Entities;
  */
 public class Customer {
 
+    // <editor-fold defaultstate="collapsed" desc="properties">
     /**
      * Unique identifier
      */
-    public int Id;
+    private int id;
 
     /**
      * Individual identifier
      */
-    public String CPF;
+    private String cpf;
 
     /**
      * Customer name
      */
-    public String Name;
+    private String name;
 
     /**
-     * Customer Email
+     * Customer email
      */
-    public String Email;
+    private String email;
 
     /**
      * Associated account
      */
-    public Account Account;
+    private Account account;
 
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="getter and setter">
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int Id) {
+        this.id = Id;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String CPF) {
+        this.cpf = CPF;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String Name) {
+        this.name = Name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String Email) {
+        this.email = Email;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account Account) {
+        this.account = Account;
+    }
+
+    // </editor-fold>
+    
     public Customer() {
     }
 
     public Customer(String cpf, String name, String email, Account account) {
-        this.CPF = cpf;
-        this.Name = name;
-        this.Email = email;
-        this.Account = account;
+        this.cpf = cpf;
+        this.name = name;
+        this.email = email;
+        this.account = account;
     }
 
     public String GetAccountBalance() {
-        return "Cliente: " + Name + " | "
-                + "CPF: " + CPF + " | "
-                + "Conta: " + Account.Number + " | "
-                + "Saldo: R$" + Account.Balance;
+        return "Cliente: " + name + " | "
+                + "CPF: " + cpf + " | "
+                + "Conta: " + account.Number + " | "
+                + "Saldo: R$" + account.Balance;
     }
 
     @Override
     public String toString() {
-        return "CPF: " + CPF + " | "
-                + "Nome: " + Name + " | "
-                + "Email:" + Email + " | "
-                + Account.toString();
+        return "CPF: " + cpf + " | "
+                + "Nome: " + name + " | "
+                + "Email:" + email + " | "
+                + account.toString();
     }
 
 }

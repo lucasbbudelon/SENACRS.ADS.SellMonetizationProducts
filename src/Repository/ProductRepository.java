@@ -336,11 +336,13 @@ public class ProductRepository implements IRepository<Product> {
                 Connection connection = (Connection) resultOperation.Data;
 
                 String sql = "SELECT * FROM Product "
-                        + "WHERE Name = ?";
+                        + "WHERE Id <> ? AND (Code = ? OR Name = ?)";
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.getName());
+                comand.setInt(1, model.getId());
+                comand.setString(2, model.getCode());
+                comand.setString(3, model.getName());
 
                 ResultSet executeResult = comand.executeQuery();
 

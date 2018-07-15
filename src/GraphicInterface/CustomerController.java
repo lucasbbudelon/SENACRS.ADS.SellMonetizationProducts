@@ -5,8 +5,8 @@
  */
 package GraphicInterface;
 
-import Business.ProductBusiness;
-import Entities.Product;
+import Business.CustomerBusiness;
+import Entities.Customer;
 import Utilities.GraphicInterfaceMessages;
 import Utilities.OperationPackage;
 import java.io.IOException;
@@ -38,23 +38,23 @@ import javafx.stage.Stage;
  *
  * @author lucas.budelon
  */
-public class ProductGraphicInterfaceController implements Initializable {
+public class CustomerController implements Initializable {
 
     // <editor-fold defaultstate="collapsed" desc="Control Variables">
-    private ProductBusiness business;
-    private ObservableList<Product> observableListProducts;
+    private CustomerBusiness productBusiness;
+    private ObservableList<Customer> observableListCustomers;
 
-    private Product selectedItem;
+    private Customer selectedItem;
 
-    public Product getSelectedItem() {
+    public Customer getSelectedItem() {
         return selectedItem;
     }
 
-    public void setSelectedItem(Product selectedItem) {
+    public void setSelectedItem(Customer selectedItem) {
         this.selectedItem = selectedItem;
-        txtCode.setText(selectedItem.getCode());
+        txtCPF.setText(selectedItem.getCpf());
         txtName.setText(selectedItem.getName());
-        txtPrice.setText(Double.toString(selectedItem.getPrice()));
+        txtEmail.setText(selectedItem.getEmail());
     }
 
     // </editor-fold>
@@ -63,11 +63,11 @@ public class ProductGraphicInterfaceController implements Initializable {
     @FXML
     private AnchorPane panelForm;
     @FXML
-    private TextField txtCode;
+    private TextField txtCPF;
     @FXML
     private TextField txtName;
     @FXML
-    private TextField txtPrice;
+    private TextField txtEmail;
 
     @FXML
     public void save(ActionEvent event) throws IOException {
@@ -95,16 +95,16 @@ public class ProductGraphicInterfaceController implements Initializable {
     private VBox panelList;
 
     @FXML
-    private TableView<Product> tableViewProducts;
+    private TableView<Customer> tableViewCustomers;
 
     @FXML
-    private TableColumn<Product, String> tableColumnCode;
+    private TableColumn<Customer, String> tableColumnCPF;
 
     @FXML
-    private TableColumn<Product, String> tableColumnName;
+    private TableColumn<Customer, String> tableColumnName;
 
     @FXML
-    private TableColumn<Product, Double> tableColumnPrice;
+    private TableColumn<Customer, Double> tableColumnEmail;
 
     @FXML
     public void create(ActionEvent event) throws IOException {
@@ -112,7 +112,7 @@ public class ProductGraphicInterfaceController implements Initializable {
         selectedItem = null;
 
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("ProductGraphicInterfaceForm.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("CustomerForm.fxml"));
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(panelList.getScene().getWindow());
@@ -124,15 +124,15 @@ public class ProductGraphicInterfaceController implements Initializable {
     @FXML
     public void update(ActionEvent event) throws IOException {
 
-        selectedItem = tableViewProducts.getSelectionModel().getSelectedItem();
+        selectedItem = tableViewCustomers.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProductGraphicInterfaceForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerForm.fxml"));
 
             Parent root = (Parent) loader.load();
 
-            ProductGraphicInterfaceController controller = (ProductGraphicInterfaceController) loader.getController();
+            CustomerController controller = (CustomerController) loader.getController();
             controller.setSelectedItem(selectedItem);
 
             Stage dialogStage = new Stage();
@@ -150,7 +150,7 @@ public class ProductGraphicInterfaceController implements Initializable {
     @FXML
     public void delete(ActionEvent event) throws IOException {
 
-        selectedItem = tableViewProducts.getSelectionModel().getSelectedItem();
+        selectedItem = tableViewCustomers.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
             delete();
@@ -166,41 +166,41 @@ public class ProductGraphicInterfaceController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        business = new ProductBusiness();
+            productBusiness = new CustomerBusiness();
 
-        if (tableViewProducts != null) {
+        if (tableViewCustomers != null) {
             list();
         }
     }
 
     private void insert() {
 
-        Product entiti = new Product();
+        Customer entiti = new Customer();
 
-        entiti.setCode(txtCode.getText());
+        entiti.setCpf(txtCPF.getText());
         entiti.setName(txtName.getText());
-        entiti.setPrice(Double.parseDouble(txtPrice.getText()));
+        entiti.setEmail(txtEmail.getText());
 
-        OperationPackage result = business.Insert(entiti);
+        OperationPackage result = productBusiness.Insert(entiti);
         Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
     }
 
     private void update() {
 
-        OperationPackage searchByCode = business.Get(selectedItem.getCode());
+        OperationPackage searchByCPF = productBusiness.Get(selectedItem.getCpf());
 
-        if (searchByCode.ValidOperation) {
+        if (searchByCPF.ValidOperation) {
 
-            selectedItem.setId(((Product) searchByCode.Data).getId());
-            selectedItem.setCode(txtCode.getText());
+            selectedItem.setId(((Customer) searchByCPF.Data).getId());
+            selectedItem.setCpf(txtCPF.getText());
             selectedItem.setName(txtName.getText());
-            selectedItem.setPrice(Double.parseDouble(txtPrice.getText()));
+            selectedItem.setEmail(txtEmail.getText());
 
-            OperationPackage result = business.Update(selectedItem);
+            OperationPackage result = productBusiness.Update(selectedItem);
 
             Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
         } else {
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(searchByCode);
+            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(searchByCPF);
         }
     }
 
@@ -218,7 +218,7 @@ public class ProductGraphicInterfaceController implements Initializable {
         dialogoExe.getButtonTypes().setAll(btnYes, btnNo);
         dialogoExe.showAndWait().ifPresent(b -> {
             if (b == btnYes) {
-                OperationPackage result = business.Delete(selectedItem.getCode());
+                OperationPackage result = productBusiness.Delete(selectedItem.getCpf());
                 Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
                 if (result.Success) {
                     list();
@@ -229,15 +229,15 @@ public class ProductGraphicInterfaceController implements Initializable {
 
     private void list() {
 
-        tableColumnCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+        tableColumnCPF.setCellValueFactory(new PropertyValueFactory<>("cpf"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableColumnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        OperationPackage getAll = business.GetAll();
+        OperationPackage getAll = productBusiness.GetAll();
 
         if (getAll.ValidOperation) {
-            observableListProducts = FXCollections.observableArrayList((ArrayList<Product>) getAll.Data);
-            tableViewProducts.setItems(observableListProducts);
+            observableListCustomers = FXCollections.observableArrayList((ArrayList<Customer>) getAll.Data);
+            tableViewCustomers.setItems(observableListCustomers);
         } else {
             Utilities.GraphicInterfaceMessages.printFeedBackCRUD(getAll);
         }

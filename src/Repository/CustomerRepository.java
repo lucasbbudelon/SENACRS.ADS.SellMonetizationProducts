@@ -49,10 +49,10 @@ public class CustomerRepository implements IRepository<Customer> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Name);
-                comand.setString(2, model.CPF);
-                comand.setString(3, model.Email);
-                comand.setInt(4, model.Account.Id);
+                comand.setString(1, model.getName());
+                comand.setString(2, model.getCpf());
+                comand.setString(3, model.getEmail());
+                comand.setInt(4, model.getAccount().Id);
 
                 int executeResult = comand.executeUpdate();
 
@@ -96,10 +96,10 @@ public class CustomerRepository implements IRepository<Customer> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Name);
-                comand.setString(2, model.CPF);
-                comand.setString(3, model.Email);
-                comand.setInt(4, model.Id);
+                comand.setString(1, model.getName());
+                comand.setString(2, model.getCpf());
+                comand.setString(3, model.getEmail());
+                comand.setInt(4, model.getId());
 
                 int executeResult = comand.executeUpdate();
 
@@ -150,7 +150,7 @@ public class CustomerRepository implements IRepository<Customer> {
 
                 resultOperation = new OperationPackage(
                         "Exclusão efetuada com sucesso!",
-                        executeResult > 0);
+                        true);
 
             } catch (SQLException ex) {
                 resultOperation = new OperationPackage(
@@ -197,11 +197,11 @@ public class CustomerRepository implements IRepository<Customer> {
                     if (getAccount.ValidOperation) {
                         Customer entiti = new Customer();
 
-                        entiti.Id = executeResult.getInt("Id");
-                        entiti.CPF = executeResult.getString("CPF");
-                        entiti.Name = executeResult.getString("Name");
-                        entiti.Email = executeResult.getString("Email");
-                        entiti.Account = (Account) getAccount.Data;
+                        entiti.setId(executeResult.getInt("Id"));
+                        entiti.setCpf(executeResult.getString("CPF"));
+                        entiti.setName(executeResult.getString("Name"));
+                        entiti.setEmail(executeResult.getString("Email"));
+                        entiti.setAccount((Account) getAccount.Data);
 
                         connection.close();
 
@@ -266,11 +266,11 @@ public class CustomerRepository implements IRepository<Customer> {
                     if (getAccount.ValidOperation) {
                         Customer entiti = new Customer();
 
-                        entiti.Id = executeResult.getInt("Id");
-                        entiti.CPF = executeResult.getString("CPF");
-                        entiti.Name = executeResult.getString("Name");
-                        entiti.Email = executeResult.getString("Email");
-                        entiti.Account = (Account) getAccount.Data;
+                        entiti.setId(executeResult.getInt("Id"));
+                        entiti.setCpf(executeResult.getString("CPF"));
+                        entiti.setName(executeResult.getString("Name"));
+                        entiti.setEmail(executeResult.getString("Email"));
+                        entiti.setAccount((Account) getAccount.Data);
 
                         connection.close();
 
@@ -334,11 +334,11 @@ public class CustomerRepository implements IRepository<Customer> {
                     if (getAccount.ValidOperation) {
                         Customer entiti = new Customer();
 
-                        entiti.Id = executeResult.getInt("Id");
-                        entiti.CPF = executeResult.getString("CPF");
-                        entiti.Name = executeResult.getString("Name");
-                        entiti.Email = executeResult.getString("Email");
-                        entiti.Account = (Account) getAccount.Data;
+                        entiti.setId(executeResult.getInt("Id"));
+                        entiti.setCpf(executeResult.getString("CPF"));
+                        entiti.setName(executeResult.getString("Name"));
+                        entiti.setEmail(executeResult.getString("Email"));
+                        entiti.setAccount((Account) getAccount.Data);
 
                         list.add(entiti);
                     } else {
@@ -375,15 +375,14 @@ public class CustomerRepository implements IRepository<Customer> {
                 Connection connection = (Connection) resultOperation.Data;
 
                 String sql = "SELECT * FROM Customer "
-                        + "WHERE CPF LIKE ?"
-                        + "OR Email LIKE ?"
-                        + "OR Name LIKE ?";
+                        + "WHERE Id <> ? AND (CPF = ? OR Email = ? OR Name = ?)";
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, "%" + model.CPF + "%");
-                comand.setString(2, "%" + model.Email + "%");
-                comand.setString(3, "%" + model.Name + "%");
+                comand.setInt(1, model.getId());
+                comand.setString(2, model.getCpf());
+                comand.setString(3, model.getEmail() );
+                comand.setString(4, model.getName());
 
                 ResultSet executeResult = comand.executeQuery();
 

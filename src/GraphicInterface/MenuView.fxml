@@ -9,7 +9,7 @@
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 
-<AnchorPane fx:id="panelMenu" prefHeight="200.0" prefWidth="350.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.MenuGraphicInterface">
+<AnchorPane fx:id="panelMenu" prefHeight="200.0" prefWidth="350.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.MenuController">
     <children>
         <Button layoutX="10.0" layoutY="10" onAction="#showCustomerGraphicInterfaceList" text="Clientes" />
         <Button layoutX="75.0" layoutY="10" onAction="#showProductGraphicInterfaceList" text="Produtos" />

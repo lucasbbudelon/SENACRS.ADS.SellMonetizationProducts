@@ -69,9 +69,9 @@ public class CustomerConsoleApplication {
     private static void Insert() throws Exception {
         Utilities.ConsoleUI.RequestDataInsert();
         Customer entiti = new Customer();
-        entiti.CPF = ConsoleUI.scanString("CPF: ");
-        entiti.Name = ConsoleUI.scanString("Nome: ");
-        entiti.Email = ConsoleUI.scanString("Email: ");
+        entiti.setCpf(ConsoleUI.scanString("CPF: "));
+        entiti.setName(ConsoleUI.scanString("Nome: "));
+        entiti.setEmail(ConsoleUI.scanString("Email: "));
         OperationPackage result = _business.Insert(entiti);
         Utilities.ConsoleUI.FeedBackCRUD(result);
     }
@@ -82,11 +82,11 @@ public class CustomerConsoleApplication {
 
         if (searchByCPF.ValidOperation) {
             Customer newEntiti = new Customer();
-            newEntiti.Id = ((Customer) searchByCPF.Data).Id;
+            newEntiti.setId(((Customer) searchByCPF.Data).getId());
             Utilities.ConsoleUI.RequestDataUpdate();
-            newEntiti.CPF = ConsoleUI.scanString("CPF: ");
-            newEntiti.Name = ConsoleUI.scanString("Nome: ");
-            newEntiti.Email = ConsoleUI.scanString("Email: ");
+            newEntiti.setCpf(ConsoleUI.scanString("CPF: "));
+            newEntiti.setName(ConsoleUI.scanString("Nome: "));
+            newEntiti.setEmail(ConsoleUI.scanString("Email: "));
             OperationPackage result = _business.Update(newEntiti);
             Utilities.ConsoleUI.FeedBackCRUD(result);
         } else {
@@ -129,7 +129,7 @@ public class CustomerConsoleApplication {
     }
 
     private static void Report() throws Exception {
-        
+
         String CPF = ConsoleUI.scanString("CPF: ");
 
         OperationPackage getAll = _business.ReportSalesByCustomer(CPF);

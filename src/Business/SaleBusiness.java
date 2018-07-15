@@ -50,13 +50,13 @@ public class SaleBusiness implements IBusiness<Sale> {
 
         CustomerBusiness customerBusiness = new CustomerBusiness();
 
-        OperationPackage result = customerBusiness.Get(model.Customer.CPF);
+        OperationPackage result = customerBusiness.Get(model.Customer.getCpf());
 
         if (result.ValidOperation) {
 
             model.Customer = (Customer) result.Data;
 
-            if (model.GetTotal() > model.Customer.Account.Balance) {
+            if (model.GetTotal() > model.Customer.getAccount().Balance) {
                 result = new OperationPackage("Não é possível realizar venda pois o cliente não possui saldo suficiente!", false);
             } else {
 
@@ -85,7 +85,7 @@ public class SaleBusiness implements IBusiness<Sale> {
                             if (resultItemsSale.ValidOperation) {
 
                                 resultItemsSale = accountBusiness
-                                        .Withdrawal(model.Customer.CPF, saleItem.Product.getPrice() * saleItem.Quantity);
+                                        .Withdrawal(model.Customer.getCpf(), saleItem.Product.getPrice() * saleItem.Quantity);
 
                                 if (!resultItemsSale.ValidOperation) {
                                     return resultItemsSale;

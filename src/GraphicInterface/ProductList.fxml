@@ -9,7 +9,7 @@
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 
-<VBox fx:id="panelList" prefHeight="350.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.ProductGraphicInterfaceController">
+<VBox fx:id="panelList" prefHeight="350.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.ProductController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>

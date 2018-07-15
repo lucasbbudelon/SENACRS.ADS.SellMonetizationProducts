@@ -75,7 +75,7 @@ public class SaleConsoleApplication {
     private static void Insert() throws Exception {
         Utilities.ConsoleUI.PrintWhiteSpace();
         Sale entiti = new Sale();
-        entiti.Customer.CPF = ConsoleUI.scanString("CPF do Cliente: ");
+        entiti.Customer.setCpf(ConsoleUI.scanString("CPF do Cliente: "));
         InsertDeleteItems(entiti);
         OperationPackage result = _business.Insert(entiti);
         Utilities.ConsoleUI.FeedBackCRUD(result);

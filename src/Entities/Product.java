@@ -12,7 +12,8 @@ package Entities;
  */
 public class Product {
 
-    /**
+    // <editor-fold defaultstate="collapsed" desc="Properties">
+        /**
      * Unique identifier
      */
     private int id;
@@ -31,24 +32,10 @@ public class Product {
      * Product value
      */
     private double price;
-
-    public void setId(int Id) {
-        this.id = Id;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getId() {
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Get">
+        public int getId() {
         return id;
     }
 
@@ -63,6 +50,25 @@ public class Product {
     public double getPrice() {
         return price;
     }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Set">
+        public void setId(int Id) {
+        this.id = Id;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+    // </editor-fold>
 
     public Product() {
     }

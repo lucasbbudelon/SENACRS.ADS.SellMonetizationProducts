@@ -56,7 +56,7 @@ public class Sale {
     public String toString() {
         return "Código: " + Code + " | "
                 + "Data: " + Date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " | "
-                + "Cliente: " + Customer.Name + " | "
+                + "Cliente: " + Customer.getName() + " | "
                 + "Itens: " + GetItems() + " | "
                 + "Total: R$" + GetTotal();
     }

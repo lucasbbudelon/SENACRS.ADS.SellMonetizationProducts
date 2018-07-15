@@ -58,7 +58,7 @@ public class CustomerBusiness implements IBusiness<Customer> {
 
                 if (result.ValidOperation) {
 
-                    model.Account = (Account) result.Data;
+                    model.setAccount((Account) result.Data);
                     result = _repository.Insert(model);
 
                 }
@@ -100,10 +100,10 @@ public class CustomerBusiness implements IBusiness<Customer> {
 
             AccountBusiness AccountBusiness = new AccountBusiness();
 
-            result = AccountBusiness.Delete(searchByCode.Account.Id);
+            result = AccountBusiness.Delete(searchByCode.getAccount().Id);
 
             if (result.ValidOperation) {
-                result = _repository.Delete(searchByCode.Id);
+                result = _repository.Delete(searchByCode.getId());
             }
         }
 

@@ -20,12 +20,12 @@ import javafx.stage.Stage;
  *
  * @author lucas.budelon
  */
-public class MenuGraphicInterface extends Application {
+public class MenuController extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent list = FXMLLoader.load(getClass().getResource("MenuGraphicInterface.fxml"));
+        Parent list = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
         
         Scene scene = new Scene(list);
         
@@ -47,7 +47,7 @@ public class MenuGraphicInterface extends Application {
     public void showCustomerGraphicInterfaceList(ActionEvent event) throws IOException {
 
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("CustomerGraphicInterfaceList.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("CustomerList.fxml"));
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(panelMenu.getScene().getWindow());
@@ -58,7 +58,7 @@ public class MenuGraphicInterface extends Application {
     public void showProductGraphicInterfaceList(ActionEvent event) throws IOException {
 
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("ProductGraphicInterfaceList.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("ProductList.fxml"));
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(panelMenu.getScene().getWindow());
