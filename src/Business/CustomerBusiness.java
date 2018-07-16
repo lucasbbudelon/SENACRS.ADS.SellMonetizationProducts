@@ -100,7 +100,7 @@ public class CustomerBusiness implements IBusiness<Customer> {
 
             AccountBusiness AccountBusiness = new AccountBusiness();
 
-            result = AccountBusiness.Delete(searchByCode.getAccount().Id);
+            result = AccountBusiness.Delete(searchByCode.getAccount().getId());
 
             if (result.ValidOperation) {
                 result = _repository.Delete(searchByCode.getId());

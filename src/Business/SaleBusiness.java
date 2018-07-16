@@ -56,7 +56,7 @@ public class SaleBusiness implements IBusiness<Sale> {
 
             model.Customer = (Customer) result.Data;
 
-            if (model.GetTotal() > model.Customer.getAccount().Balance) {
+            if (model.GetTotal() > model.Customer.getAccount().getBalance()) {
                 result = new OperationPackage("Não é possível realizar venda pois o cliente não possui saldo suficiente!", false);
             } else {
 

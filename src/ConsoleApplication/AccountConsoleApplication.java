@@ -63,7 +63,7 @@ public class AccountConsoleApplication {
     private static void Insert() throws Exception {
         Utilities.ConsoleUI.RequestDataInsert();
         Account entiti = new Account();
-        entiti.Number = ConsoleUI.scanString("Número: ");
+        entiti.setNumber(ConsoleUI.scanString("Número: "));
         OperationPackage result = _business.Insert(entiti);
         Utilities.ConsoleUI.FeedBackCRUD(result);
     }
@@ -74,10 +74,10 @@ public class AccountConsoleApplication {
         
         if (searchByNumber.ValidOperation) {
             Account newEntiti = new Account();
-            newEntiti.Id = ((Account) searchByNumber.Data).Id;
-            newEntiti.Balance = ((Account) searchByNumber.Data).Balance;
+            newEntiti.setId(((Account) searchByNumber.Data).getId());
+            newEntiti.setBalance(((Account) searchByNumber.Data).getBalance());
             Utilities.ConsoleUI.RequestDataUpdate();
-            newEntiti.Number = ConsoleUI.scanString("Número: ");
+            newEntiti.setNumber(ConsoleUI.scanString("Número: "));
             OperationPackage result = _business.Update(newEntiti);
             Utilities.ConsoleUI.FeedBackCRUD(result);
         } else {

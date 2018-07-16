@@ -52,7 +52,7 @@ public class CustomerRepository implements IRepository<Customer> {
                 comand.setString(1, model.getName());
                 comand.setString(2, model.getCpf());
                 comand.setString(3, model.getEmail());
-                comand.setInt(4, model.getAccount().Id);
+                comand.setInt(4, model.getAccount().getId());
 
                 int executeResult = comand.executeUpdate();
 

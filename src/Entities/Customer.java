@@ -96,8 +96,8 @@ public class Customer {
     public String GetAccountBalance() {
         return "Cliente: " + name + " | "
                 + "CPF: " + cpf + " | "
-                + "Conta: " + account.Number + " | "
-                + "Saldo: R$" + account.Balance;
+                + "Conta: " + account.getNumber() + " | "
+                + "Saldo: R$" + account.getBalance();
     }
 
     @Override

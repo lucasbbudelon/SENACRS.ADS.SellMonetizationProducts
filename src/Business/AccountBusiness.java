@@ -82,8 +82,9 @@ public class AccountBusiness implements IBusiness<Account> {
         if (packageReturn.ValidOperation) {
 
             Customer customer = (Customer) packageReturn.Data;
-            customer.getAccount().Balance += value;
-
+            double currentBalance = customer.getAccount().getBalance();
+            customer.getAccount().setBalance(currentBalance + value);
+            
             OperationPackage update = _repository.Update(customer.getAccount());
 
             if (update.HasError || !update.Success) {
@@ -105,11 +106,14 @@ public class AccountBusiness implements IBusiness<Account> {
 
             Customer customer = (Customer) packageReturn.Data;
 
-            if (value > customer.getAccount().Balance) {
+            if (value > customer.getAccount().getBalance()) {
                 packageReturn.Message = "Não foi possível efetuar o débito pois não há saldo suficiente na conta";
                 packageReturn.Success = false;
             } else {
-                customer.getAccount().Balance -= value;
+                
+                double currentBalance = customer.getAccount().getBalance();
+                customer.getAccount().setBalance(currentBalance - value);
+                
                 OperationPackage update = _repository.Update(customer.getAccount());
 
                 if (update.HasError || !update.Success) {

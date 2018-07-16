@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+
+<AnchorPane fx:id="accountOperations" prefHeight="200.0" prefWidth="350.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.AccountController">
+    <children>
+        <Button layoutX="70.0" layoutY="85.0" mnemonicParsing="false" onAction="#openDeposit" text="Depositar" />
+        <Button layoutX="147.0" layoutY="85.0" mnemonicParsing="false" onAction="#openWithdrawal" text="Sacar" />
+        <Button layoutX="200.0" layoutY="85.0" mnemonicParsing="false" onAction="#openTransfer" text="Transferir" />
+        <Button layoutX="70.0" layoutY="120.0" mnemonicParsing="false" onAction="#openBalance" text="Saldo" />
+        <Button layoutX="147.0" layoutY="120.0" mnemonicParsing="false" onAction="#cancel" text="Calcelar" />
+    </children>
+</AnchorPane>

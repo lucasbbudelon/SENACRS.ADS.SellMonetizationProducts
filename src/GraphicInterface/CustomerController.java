@@ -7,7 +7,7 @@ package GraphicInterface;
 
 import Business.CustomerBusiness;
 import Entities.Customer;
-import Utilities.GraphicInterfaceMessages;
+import Utilities.GraphicInterfaceHelper;
 import Utilities.OperationPackage;
 import java.io.IOException;
 import java.net.URL;
@@ -143,7 +143,7 @@ public class CustomerController implements Initializable {
             list();
 
         } else {
-            GraphicInterfaceMessages.printUnselectedItem();
+            GraphicInterfaceHelper.printUnselectedItem();
         }
     }
 
@@ -155,7 +155,7 @@ public class CustomerController implements Initializable {
         if (selectedItem != null) {
             delete();
         } else {
-            GraphicInterfaceMessages.printUnselectedItem();
+            GraphicInterfaceHelper.printUnselectedItem();
         }
     }
 
@@ -182,7 +182,7 @@ public class CustomerController implements Initializable {
         entiti.setEmail(txtEmail.getText());
 
         OperationPackage result = productBusiness.Insert(entiti);
-        Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
+        Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
     }
 
     private void update() {
@@ -198,9 +198,9 @@ public class CustomerController implements Initializable {
 
             OperationPackage result = productBusiness.Update(selectedItem);
 
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
         } else {
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(searchByCPF);
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(searchByCPF);
         }
     }
 
@@ -219,7 +219,7 @@ public class CustomerController implements Initializable {
         dialogoExe.showAndWait().ifPresent(b -> {
             if (b == btnYes) {
                 OperationPackage result = productBusiness.Delete(selectedItem.getCpf());
-                Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
+                Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
                 if (result.Success) {
                     list();
                 }
@@ -239,7 +239,7 @@ public class CustomerController implements Initializable {
             observableListCustomers = FXCollections.observableArrayList((ArrayList<Customer>) getAll.Data);
             tableViewCustomers.setItems(observableListCustomers);
         } else {
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(getAll);
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(getAll);
         }
     }
 }

@@ -46,8 +46,8 @@ public class AccountRepository implements IRepository<Account> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Number);
-                comand.setDouble(2, model.Balance);
+                comand.setString(1, model.getNumber());
+                comand.setDouble(2, model.getBalance());
 
                 int executeResult = comand.executeUpdate();
 
@@ -91,9 +91,9 @@ public class AccountRepository implements IRepository<Account> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Number);
-                comand.setDouble(2, model.Balance);
-                comand.setInt(3, model.Id);
+                comand.setString(1, model.getNumber());
+                comand.setDouble(2, model.getBalance());
+                comand.setInt(3, model.getId());
 
                 int executeResult = comand.executeUpdate();
 
@@ -184,11 +184,11 @@ public class AccountRepository implements IRepository<Account> {
                 if (executeResult.next()) {
 
                     Account entiti = new Account();
-                    
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Number = executeResult.getString("Number");
-                    entiti.Balance = executeResult.getDouble("Balance");
-                    
+
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setNumber(executeResult.getString("Number"));
+                    entiti.setBalance(executeResult.getDouble("Balance"));
+
                     connection.close();
 
                     resultOperation = new OperationPackage(
@@ -234,18 +234,18 @@ public class AccountRepository implements IRepository<Account> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, "%"+number+"%");
+                comand.setString(1, "%" + number + "%");
 
                 ResultSet executeResult = comand.executeQuery();
 
                 if (executeResult.next()) {
 
                     Account entiti = new Account();
-                    
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Number = executeResult.getString("Number");
-                    entiti.Balance = executeResult.getDouble("Balance");
-                    
+
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setNumber(executeResult.getString("Number"));
+                    entiti.setBalance(executeResult.getDouble("Balance"));
+
                     connection.close();
 
                     resultOperation = new OperationPackage(
@@ -295,15 +295,15 @@ public class AccountRepository implements IRepository<Account> {
                 ArrayList<Account> list = new ArrayList<>();
 
                 while (executeResult.next()) {
-                    
+
                     Account entiti = new Account();
-                    
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Number = executeResult.getString("Number");
-                    entiti.Balance = executeResult.getDouble("Balance");
-                    
+
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setNumber(executeResult.getString("Number"));
+                    entiti.setBalance(executeResult.getDouble("Balance"));
+
                     list.add(entiti);
-                    
+
                 }
 
                 connection.close();
@@ -323,7 +323,7 @@ public class AccountRepository implements IRepository<Account> {
 
         return resultOperation;
     }
-    
+
     @Override
     public OperationPackage ValidateDuplicateData(Account model) {
         IDatabaseConnection databaseConnection = new MySQLDatabaseConnections();
@@ -335,11 +335,12 @@ public class AccountRepository implements IRepository<Account> {
                 Connection connection = (Connection) resultOperation.Data;
 
                 String sql = "SELECT * FROM Account "
-                        + "WHERE Number LIKE ?";
+                        + "WHERE Id <> ? AND Number = ?";
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, "%" + model.Number + "%");
+                comand.setInt(1, model.getId());
+                comand.setString(1, model.getNumber());
 
                 ResultSet executeResult = comand.executeQuery();
 

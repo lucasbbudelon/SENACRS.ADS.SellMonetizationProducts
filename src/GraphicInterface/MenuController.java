@@ -66,10 +66,10 @@ public class MenuController extends Application {
     }
     
     @FXML
-    public void showMoveAccount(ActionEvent event) throws IOException {
+    public void showAccountOperations(ActionEvent event) throws IOException {
 
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource(".fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("AccountOperations.fxml"));
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(panelMenu.getScene().getWindow());

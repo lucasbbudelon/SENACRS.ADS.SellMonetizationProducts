@@ -13,7 +13,7 @@
     <children>
         <Button layoutX="10.0" layoutY="10" onAction="#showCustomerGraphicInterfaceList" text="Clientes" />
         <Button layoutX="75.0" layoutY="10" onAction="#showProductGraphicInterfaceList" text="Produtos" />
-        <Button layoutX="145.0" layoutY="10" onAction="#showMoveAccount" text="Movimentar Conta" />
+        <Button layoutX="145.0" layoutY="10" onAction="#showAccountOperations" text="Movimentar Conta" />
         <Button layoutX="265.0" layoutY="10" onAction="#showSales" text="Vendas" />
     </children>
 </AnchorPane>

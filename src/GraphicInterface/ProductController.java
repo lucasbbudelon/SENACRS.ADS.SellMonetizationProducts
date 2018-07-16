@@ -7,7 +7,7 @@ package GraphicInterface;
 
 import Business.ProductBusiness;
 import Entities.Product;
-import Utilities.GraphicInterfaceMessages;
+import Utilities.GraphicInterfaceHelper;
 import Utilities.OperationPackage;
 import java.io.IOException;
 import java.net.URL;
@@ -143,7 +143,7 @@ public class ProductController implements Initializable {
             list();
 
         } else {
-            GraphicInterfaceMessages.printUnselectedItem();
+            GraphicInterfaceHelper.printUnselectedItem();
         }
     }
 
@@ -155,7 +155,7 @@ public class ProductController implements Initializable {
         if (selectedItem != null) {
             delete();
         } else {
-            GraphicInterfaceMessages.printUnselectedItem();
+            GraphicInterfaceHelper.printUnselectedItem();
         }
     }
 
@@ -182,7 +182,7 @@ public class ProductController implements Initializable {
         entiti.setPrice(Double.parseDouble(txtPrice.getText()));
 
         OperationPackage result = business.Insert(entiti);
-        Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
+        Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
     }
 
     private void update() {
@@ -198,9 +198,9 @@ public class ProductController implements Initializable {
 
             OperationPackage result = business.Update(selectedItem);
 
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
         } else {
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(searchByCode);
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(searchByCode);
         }
     }
 
@@ -219,7 +219,7 @@ public class ProductController implements Initializable {
         dialogoExe.showAndWait().ifPresent(b -> {
             if (b == btnYes) {
                 OperationPackage result = business.Delete(selectedItem.getCode());
-                Utilities.GraphicInterfaceMessages.printFeedBackCRUD(result);
+                Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
                 if (result.Success) {
                     list();
                 }
@@ -239,7 +239,7 @@ public class ProductController implements Initializable {
             observableListProducts = FXCollections.observableArrayList((ArrayList<Product>) getAll.Data);
             tableViewProducts.setItems(observableListProducts);
         } else {
-            Utilities.GraphicInterfaceMessages.printFeedBackCRUD(getAll);
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(getAll);
         }
     }
 }

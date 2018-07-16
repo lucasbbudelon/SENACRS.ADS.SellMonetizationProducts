@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
  *
  * @author lucas.budelon
  */
-public class GraphicInterfaceMessages {
+public class GraphicInterfaceHelper {
 
     public static void printMessageError(String msg) {
         JOptionPane.showMessageDialog(null,
