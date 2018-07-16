@@ -47,8 +47,8 @@ public class SaleItemRepository {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setInt(1, model.Product.getId());
-                comand.setInt(2, model.Quantity);
+                comand.setInt(1, model.getProduct().getId());
+                comand.setInt(2, model.getQuantity());
                 comand.setInt(3, saleId);
 
                 int executeResult = comand.executeUpdate();
@@ -108,8 +108,8 @@ public class SaleItemRepository {
 
                         SaleItem entiti = new SaleItem();
 
-                        entiti.Quantity = executeResult.getInt("Quantity");
-                        entiti.Product = (Product) getProduct.Data;
+                        entiti.setQuantity(executeResult.getInt("Quantity"));
+                        entiti.setProduct((Product) getProduct.Data);
 
                         list.add(entiti);
                     } else {

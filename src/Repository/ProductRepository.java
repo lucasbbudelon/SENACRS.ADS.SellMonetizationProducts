@@ -407,8 +407,8 @@ public class ProductRepository implements IRepository<Product> {
 
                         SaleItem entiti = new SaleItem();
 
-                        entiti.Quantity = executeResult.getInt("Quantity");
-                        entiti.Product = (Product) getProduct.Data;
+                        entiti.setQuantity(executeResult.getInt("Quantity"));
+                        entiti.setProduct((Product) getProduct.Data);
 
                         list.add(entiti);
                     } else {

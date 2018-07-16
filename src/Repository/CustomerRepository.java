@@ -442,9 +442,9 @@ public class CustomerRepository implements IRepository<Customer> {
 
                     Sale entiti = new Sale();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Date = (executeResult.getDate("DateTime")).toLocalDate();
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setDate((executeResult.getDate("DateTime")).toLocalDate());
 
                     CustomerRepository customerRepository = new CustomerRepository();
 
@@ -453,7 +453,7 @@ public class CustomerRepository implements IRepository<Customer> {
 
                     if (getCustomer.ValidOperation) {
 
-                        entiti.Customer = (Customer) getCustomer.Data;
+                        entiti.setCustomer((Customer) getCustomer.Data);
 
                         SaleItemRepository saleItemRepository = new SaleItemRepository();
 
@@ -461,7 +461,7 @@ public class CustomerRepository implements IRepository<Customer> {
                                 .SearchBySale(executeResult.getInt("Id"));
 
                         if (getSaleItem.ValidOperation) {
-                            entiti.Items = (ArrayList<SaleItem>) getSaleItem.Data;
+                            entiti.items = (ArrayList<SaleItem>) getSaleItem.Data;
                         } else {
                             return getCustomer;
                         }

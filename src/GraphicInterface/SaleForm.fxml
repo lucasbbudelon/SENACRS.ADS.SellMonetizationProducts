@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+
+<VBox fx:id="panelSaleForm" prefHeight="400.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.SaleController">
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <items>
+                <Label text="Cliente: " />
+                <TextField fx:id="txtCustomer" disable="true" />
+            
+                <Button onAction="#findCustomer" text="Buscar Cliente" />
+                <Button onAction="#addProduct" text="Adicionar Produto" />
+                <Button onAction="#finalizeSale" text="Finalizar Venda" />
+            </items>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </ToolBar>
+        <TableView fx:id="tableSaleItem">
+            <columns>
+                <TableColumn fx:id="tableColumnSaleItemProduct" prefWidth="200.0" text="Produto" />
+                <TableColumn fx:id="tableColumnSaleItemQuantity" prefWidth="75.0" text="Quantidade" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

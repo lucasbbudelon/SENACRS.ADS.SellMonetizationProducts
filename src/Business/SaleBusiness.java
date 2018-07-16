@@ -50,20 +50,20 @@ public class SaleBusiness implements IBusiness<Sale> {
 
         CustomerBusiness customerBusiness = new CustomerBusiness();
 
-        OperationPackage result = customerBusiness.Get(model.Customer.getCpf());
+        OperationPackage result = customerBusiness.Get(model.getCustomer().getCpf());
 
         if (result.ValidOperation) {
 
-            model.Customer = (Customer) result.Data;
+            model.setCustomer((Customer) result.Data);
 
-            if (model.GetTotal() > model.Customer.getAccount().getBalance()) {
+            if (model.getTotal() > model.getCustomer().getAccount().getBalance()) {
                 result = new OperationPackage("Não é possível realizar venda pois o cliente não possui saldo suficiente!", false);
             } else {
 
                 String code = Utilities.Tools.GenerateRandomString(6);
 
-                model.Code = code;
-                model.Date = LocalDate.now();
+                model.setCode(code);
+                model.setDate(LocalDate.now());
 
                 result = _repository.Insert(model);
 
@@ -73,19 +73,19 @@ public class SaleBusiness implements IBusiness<Sale> {
 
                     if (resultItemsSale.ValidOperation) {
 
-                        int saleId = ((Sale) resultItemsSale.Data).Id;
+                        int saleId = ((Sale) resultItemsSale.Data).getId();
 
                         SaleItemRepository saleItemRepository = new SaleItemRepository();
                         AccountBusiness accountBusiness = new AccountBusiness();
 
-                        for (SaleItem saleItem : model.Items) {
+                        for (SaleItem saleItem : model.items) {
 
                             resultItemsSale = saleItemRepository.Insert(saleId, saleItem);
 
                             if (resultItemsSale.ValidOperation) {
 
                                 resultItemsSale = accountBusiness
-                                        .Withdrawal(model.Customer.getCpf(), saleItem.Product.getPrice() * saleItem.Quantity);
+                                        .Withdrawal(model.getCustomer().getCpf(), saleItem.getProduct().getPrice() * saleItem.getQuantity());
 
                                 if (!resultItemsSale.ValidOperation) {
                                     return resultItemsSale;

@@ -6,13 +6,19 @@
 package GraphicInterface;
 
 import Business.CustomerBusiness;
+import Business.SaleBusiness;
 import Entities.Customer;
+import Entities.Sale;
 import Utilities.GraphicInterfaceHelper;
 import Utilities.OperationPackage;
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +37,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -41,8 +47,10 @@ import javafx.stage.Stage;
 public class CustomerController implements Initializable {
 
     // <editor-fold defaultstate="collapsed" desc="Control Variables">
-    private CustomerBusiness productBusiness;
+    private CustomerBusiness customerBusiness;
+
     private ObservableList<Customer> observableListCustomers;
+    private ObservableList<Sale> observableListCustomersReport;
 
     private Customer selectedItem;
 
@@ -58,7 +66,6 @@ public class CustomerController implements Initializable {
     }
 
     // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Bind Form">
     @FXML
     private AnchorPane panelForm;
@@ -159,17 +166,66 @@ public class CustomerController implements Initializable {
         }
     }
 
+    @FXML
+    public void report(ActionEvent event) throws IOException {
+
+        selectedItem = tableViewCustomers.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerReport.fxml"));
+
+            Parent root = (Parent) loader.load();
+
+            CustomerController controller = (CustomerController) loader.getController();
+            controller.setSelectedItem(selectedItem);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setScene(new Scene(root));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(panelList.getScene().getWindow());
+            dialogStage.setTitle("Vendas efetuadas por " + selectedItem.getName());
+            dialogStage.showAndWait();
+
+        } else {
+            GraphicInterfaceHelper.printUnselectedItem();
+        }
+    }
+
     // </editor-fold>
-    
+    // <editor-fold defaultstate="collapsed" desc="Bind Report">
+    @FXML
+    private VBox panelReport;
+
+    @FXML
+    private TableView<Sale> tableViewCustomersReport;
+
+    @FXML
+    private TableColumn<Sale, String> tableColumnSaleCode;
+
+    @FXML
+    private TableColumn<Sale, String> tableColumnSaleDate;
+
+    @FXML
+    private TableColumn<Sale, Double> tableColumnSaleItems;
+
+    @FXML
+    private TableColumn<Sale, Double> tableColumnSaleTotal;
+
+    // </editor-fold>
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-            productBusiness = new CustomerBusiness();
+        customerBusiness = new CustomerBusiness();
 
         if (tableViewCustomers != null) {
             list();
+        }
+
+        if (tableViewCustomersReport != null) {
+            reportSales();
         }
     }
 
@@ -181,13 +237,13 @@ public class CustomerController implements Initializable {
         entiti.setName(txtName.getText());
         entiti.setEmail(txtEmail.getText());
 
-        OperationPackage result = productBusiness.Insert(entiti);
+        OperationPackage result = customerBusiness.Insert(entiti);
         Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
     }
 
     private void update() {
 
-        OperationPackage searchByCPF = productBusiness.Get(selectedItem.getCpf());
+        OperationPackage searchByCPF = customerBusiness.Get(selectedItem.getCpf());
 
         if (searchByCPF.ValidOperation) {
 
@@ -196,7 +252,7 @@ public class CustomerController implements Initializable {
             selectedItem.setName(txtName.getText());
             selectedItem.setEmail(txtEmail.getText());
 
-            OperationPackage result = productBusiness.Update(selectedItem);
+            OperationPackage result = customerBusiness.Update(selectedItem);
 
             Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
         } else {
@@ -218,7 +274,7 @@ public class CustomerController implements Initializable {
         dialogoExe.getButtonTypes().setAll(btnYes, btnNo);
         dialogoExe.showAndWait().ifPresent(b -> {
             if (b == btnYes) {
-                OperationPackage result = productBusiness.Delete(selectedItem.getCpf());
+                OperationPackage result = customerBusiness.Delete(selectedItem.getCpf());
                 Utilities.GraphicInterfaceHelper.printFeedBackCRUD(result);
                 if (result.Success) {
                     list();
@@ -233,11 +289,37 @@ public class CustomerController implements Initializable {
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        OperationPackage getAll = productBusiness.GetAll();
+        OperationPackage getAll = customerBusiness.GetAll();
 
         if (getAll.ValidOperation) {
             observableListCustomers = FXCollections.observableArrayList((ArrayList<Customer>) getAll.Data);
             tableViewCustomers.setItems(observableListCustomers);
+        } else {
+            Utilities.GraphicInterfaceHelper.printFeedBackCRUD(getAll);
+        }
+    }
+
+    private void reportSales() {
+
+        tableColumnSaleCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+        tableColumnSaleDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Sale, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Sale, String> cell) {
+                final Sale sale = cell.getValue();
+                final SimpleObjectProperty<String> simpleObject = new SimpleObjectProperty(
+                        sale.getDate().format(DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT))
+                );
+                return simpleObject;
+            }
+
+        });
+        tableColumnSaleItems.setCellValueFactory(new PropertyValueFactory<>("itemsResume"));
+        tableColumnSaleTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        OperationPackage getAll = customerBusiness.ReportSalesByCustomer(selectedItem.getCpf());
+
+        if (getAll.ValidOperation) {
+            observableListCustomersReport = FXCollections.observableArrayList((ArrayList<Sale>) getAll.Data);
+            tableViewCustomersReport.setItems(observableListCustomersReport);
         } else {
             Utilities.GraphicInterfaceHelper.printFeedBackCRUD(getAll);
         }

@@ -80,7 +80,7 @@ public class MenuController extends Application {
     public void showSales(ActionEvent event) throws IOException {
 
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource(".fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("SaleList.fxml"));
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(panelMenu.getScene().getWindow());

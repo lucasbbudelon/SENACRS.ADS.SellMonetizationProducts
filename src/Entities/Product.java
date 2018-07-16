@@ -88,8 +88,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Código: " + code + " | "
-                + "Nome: " + name + " | "
-                + "Preço: R$ " + price;
+        return name + "(R$ " + price + ")";
     }
 }

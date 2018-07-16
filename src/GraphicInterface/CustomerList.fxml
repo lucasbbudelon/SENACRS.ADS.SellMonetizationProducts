@@ -16,6 +16,7 @@
           <Button mnemonicParsing="false" onAction="#create" text="Cadastrar" />
             <Button mnemonicParsing="false" onAction="#update" text="Editar" />
             <Button mnemonicParsing="false" onAction="#delete" text="Remover" />
+            <Button mnemonicParsing="false" onAction="#report" text="Relatório" />
         </items>
          <VBox.margin>
             <Insets />

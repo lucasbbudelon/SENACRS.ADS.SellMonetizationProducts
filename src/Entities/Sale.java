@@ -16,64 +16,114 @@ import java.util.ArrayList;
  */
 public class Sale {
 
+    // <editor-fold defaultstate="collapsed" desc="properties">
     /**
      * Unique identifier
      */
-    public int Id;
+    private int id;
 
     /**
      * Sale identifier
      */
-    public String Code;
+    private String code;
 
     /**
-     * Date of sale
+     * date of sale
      */
-    public LocalDate Date;
-
-    /**
-     *
-     */
-    public Customer Customer;
+    private LocalDate date;
 
     /**
      *
      */
-    public ArrayList<SaleItem> Items;
+    private Customer customer;
 
-    public Sale() {
-        this.Customer = new Customer();
+    /**
+     *
+     */
+    public ArrayList<SaleItem> items;
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="getter and setter">
+    public int getId() {
+        return id;
     }
 
-    public Sale(String code, LocalDate dateTime, Customer customer, ArrayList<SaleItem> items) {
-        this.Code = code;
-        this.Date = dateTime;
-        this.Customer = customer;
-        this.Items = items;
+    public void setId(int Id) {
+        this.id = Id;
     }
 
-    @Override
-    public String toString() {
-        return "Código: " + Code + " | "
-                + "Data: " + Date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " | "
-                + "Cliente: " + Customer.getName() + " | "
-                + "Itens: " + GetItems() + " | "
-                + "Total: R$" + GetTotal();
+    public String getCode() {
+        return code;
     }
 
-    public String GetItems() {
+    public void setCode(String Code) {
+        this.code = Code;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate Date) {
+        this.date = Date;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer Customer) {
+        this.customer = Customer;
+    }
+
+    public ArrayList<SaleItem> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayList<SaleItem> Items) {
+        this.items = Items;
+    }
+    
+    public double getTotal() {
+        double totalSale = 0;
+        totalSale = items.stream()
+                .map((item) -> item.getProduct().getPrice() * item.getQuantity())
+                .reduce(totalSale, (accumulator, _item) -> accumulator + _item);
+        return totalSale;
+    }
+    
+    public String getItemsResume() {
         String items = "";
-        for (SaleItem item : Items) {
-            items += item.Product.getName() + "(" + item.Quantity + "), ";
+        for (SaleItem item : this.items) {
+            items += item.getProduct().getName() + " (" + item.getQuantity() + ")\n";
         }
         return items;
     }
 
-    public double GetTotal() {
-        double totalSale = 0;
-        totalSale = Items.stream()
-                .map((item) -> item.Product.getPrice() * item.Quantity)
-                .reduce(totalSale, (accumulator, _item) -> accumulator + _item);
-        return totalSale;
+// </editor-fold>
+    
+    public Sale() {
+        this.customer = new Customer();
+        this.items = new ArrayList<>();
     }
+
+    public Sale(String code, LocalDate dateTime, Customer customer, ArrayList<SaleItem> items) {
+        this.code = code;
+        this.date = dateTime;
+        this.customer = customer;
+        this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "Código: " + code + " | "
+                + "Data: " + date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " | "
+                + "Cliente: " + customer.getName() + " | "
+                + "Itens: " + getItemsResume() + " | "
+                + "Total: R$" + getTotal();
+    }
+
+    
+
+    
 }

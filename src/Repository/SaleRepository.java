@@ -48,9 +48,9 @@ public class SaleRepository implements IRepository<Sale> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Code);
-                comand.setDate(2, java.sql.Date.valueOf(model.Date));
-                comand.setInt(3, model.Customer.getId());
+                comand.setString(1, model.getCode());
+                comand.setDate(2, java.sql.Date.valueOf(model.getDate()));
+                comand.setInt(3, model.getCustomer().getId());
 
                 int executeResult = comand.executeUpdate();
 
@@ -94,10 +94,10 @@ public class SaleRepository implements IRepository<Sale> {
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, model.Code);
-                comand.setDate(2, java.sql.Date.valueOf(model.Date));
-                comand.setInt(3, model.Customer.getId());
-                comand.setInt(4, model.Id);
+                comand.setString(1, model.getCode());
+                comand.setDate(2, java.sql.Date.valueOf(model.getDate()));
+                comand.setInt(3, model.getCustomer().getId());
+                comand.setInt(4, model.getId());
 
                 int executeResult = comand.executeUpdate();
 
@@ -189,15 +189,15 @@ public class SaleRepository implements IRepository<Sale> {
 
                     Sale entiti = new Sale();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Date = (executeResult.getDate("DateTime")).toLocalDate();
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setDate((executeResult.getDate("DateTime")).toLocalDate());
 
                     CustomerRepository customerRepository = new CustomerRepository();
                     OperationPackage getCustomer = customerRepository
                             .SearchByPK(executeResult.getInt("CustomerId"));
                     if (getCustomer.ValidOperation) {
-                        entiti.Customer = (Customer) getCustomer.Data;
+                        entiti.setCustomer((Customer)getCustomer.Data);
                     } else {
                         resultOperation = getCustomer;
                     }
@@ -206,7 +206,7 @@ public class SaleRepository implements IRepository<Sale> {
                     OperationPackage getSaleItem = saleItemRepository
                             .SearchBySale(executeResult.getInt("Id"));
                     if (getSaleItem.ValidOperation) {
-                        entiti.Items = (ArrayList<SaleItem>) getSaleItem.Data;
+                        entiti.items = (ArrayList<SaleItem>) getSaleItem.Data;
                     } else {
                         resultOperation = getCustomer;
                     }
@@ -264,15 +264,15 @@ public class SaleRepository implements IRepository<Sale> {
 
                     Sale entiti = new Sale();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Date = (executeResult.getDate("DateTime")).toLocalDate();
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setDate((executeResult.getDate("DateTime")).toLocalDate());
 
                     CustomerRepository customerRepository = new CustomerRepository();
                     OperationPackage getCustomer = customerRepository
                             .SearchByPK(executeResult.getInt("CustomerId"));
                     if (getCustomer.ValidOperation) {
-                        entiti.Customer = (Customer) getCustomer.Data;
+                        entiti.setCustomer((Customer) getCustomer.Data);
                     } else {
                         resultOperation = getCustomer;
                     }
@@ -281,7 +281,7 @@ public class SaleRepository implements IRepository<Sale> {
                     OperationPackage getSaleItem = saleItemRepository
                             .SearchBySale(executeResult.getInt("Id"));
                     if (getSaleItem.ValidOperation) {
-                        entiti.Items = (ArrayList<SaleItem>) getSaleItem.Data;
+                        entiti.items = (ArrayList<SaleItem>) getSaleItem.Data;
                     } else {
                         resultOperation = getCustomer;
                     }
@@ -339,9 +339,9 @@ public class SaleRepository implements IRepository<Sale> {
 
                     Sale entiti = new Sale();
 
-                    entiti.Id = executeResult.getInt("Id");
-                    entiti.Code = executeResult.getString("Code");
-                    entiti.Date = (executeResult.getDate("DateTime")).toLocalDate();
+                    entiti.setId(executeResult.getInt("Id"));
+                    entiti.setCode(executeResult.getString("Code"));
+                    entiti.setDate((executeResult.getDate("DateTime")).toLocalDate());
 
                     CustomerRepository customerRepository = new CustomerRepository();
 
@@ -350,7 +350,7 @@ public class SaleRepository implements IRepository<Sale> {
 
                     if (getCustomer.ValidOperation) {
 
-                        entiti.Customer = (Customer) getCustomer.Data;
+                        entiti.setCustomer((Customer) getCustomer.Data);
 
                         SaleItemRepository saleItemRepository = new SaleItemRepository();
 
@@ -358,7 +358,7 @@ public class SaleRepository implements IRepository<Sale> {
                                 .SearchBySale(executeResult.getInt("Id"));
 
                         if (getSaleItem.ValidOperation) {
-                            entiti.Items = (ArrayList<SaleItem>) getSaleItem.Data;
+                            entiti.items = (ArrayList<SaleItem>) getSaleItem.Data;
                         } else {
                             return getSaleItem;
                         }
@@ -399,11 +399,12 @@ public class SaleRepository implements IRepository<Sale> {
                 Connection connection = (Connection) resultOperation.Data;
 
                 String sql = "SELECT * FROM Sale "
-                        + "WHERE Code LIKE ?";
+                        + "WHERE Id = ? AND Code = ?";
 
                 PreparedStatement comand = connection.prepareStatement(sql);
 
-                comand.setString(1, "%" + model.Code + "%");
+                comand.setInt(1, model.getId());
+                comand.setString(2, model.getCode());
 
                 ResultSet executeResult = comand.executeQuery();
 
@@ -411,7 +412,7 @@ public class SaleRepository implements IRepository<Sale> {
 
                     connection.close();
                     resultOperation = new OperationPackage(
-                            "Dados Inválidos!",
+                            "Já existe uam venda cadastrada com esse código!",
                             false);
 
                 } else {

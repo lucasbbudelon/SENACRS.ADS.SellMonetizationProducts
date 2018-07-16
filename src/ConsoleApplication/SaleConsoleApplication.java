@@ -75,7 +75,7 @@ public class SaleConsoleApplication {
     private static void Insert() throws Exception {
         Utilities.ConsoleUI.PrintWhiteSpace();
         Sale entiti = new Sale();
-        entiti.Customer.setCpf(ConsoleUI.scanString("CPF do Cliente: "));
+        entiti.getCustomer().setCpf(ConsoleUI.scanString("CPF do Cliente: "));
         InsertDeleteItems(entiti);
         OperationPackage result = _business.Insert(entiti);
         Utilities.ConsoleUI.FeedBackCRUD(result);
@@ -83,7 +83,7 @@ public class SaleConsoleApplication {
 
     private static void InsertDeleteItems(Sale entiti) throws Exception {
 
-        entiti.Items = new ArrayList<>();
+        entiti.items = new ArrayList<>();
 
         ShowMenuItems();
 
@@ -105,9 +105,9 @@ public class SaleConsoleApplication {
                             PrintProductNotFound();
                         } else {
                             SaleItem item = new SaleItem();
-                            item.Product = product;
-                            item.Quantity = ConsoleUI.scanInt("Quantidade: ");
-                            entiti.Items.add(item);
+                            item.setProduct(product);
+                            item.setQuantity(ConsoleUI.scanInt("Quantidade: "));
+                            entiti.items.add(item);
                             ConsoleUI.PrintMessage("Produto inserido com sucesso!");
                         }
 
@@ -120,8 +120,8 @@ public class SaleConsoleApplication {
                 case 2: {
                     boolean removeSuccess = false;
                     String code = ConsoleUI.scanString("Código do Produto: ");
-                    entiti.Items.stream().filter((item) -> (item.Product.getCode().equals(code))).forEachOrdered((item) -> {
-                        entiti.Items.remove(item);
+                    entiti.items.stream().filter((item) -> (item.getProduct().getCode().equals(code))).forEachOrdered((item) -> {
+                        entiti.items.remove(item);
                     });
                     if (removeSuccess) {
                         ConsoleUI.PrintMessage("Produto removido com sucesso!");
@@ -132,7 +132,7 @@ public class SaleConsoleApplication {
                 }
 
                 case 3: {
-                    entiti.Items.forEach((item) -> {
+                    entiti.items.forEach((item) -> {
                         Utilities.ConsoleUI.PrintMessage(item.toString());
                     });
                     break;

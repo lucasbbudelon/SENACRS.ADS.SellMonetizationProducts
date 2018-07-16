@@ -102,10 +102,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "CPF: " + cpf + " | "
-                + "Nome: " + name + " | "
-                + "Email:" + email + " | "
-                + account.toString();
+        return name + "\nCPF: " + cpf;
     }
 
 }

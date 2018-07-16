@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+
+<VBox fx:id="panelSaleCustomerList" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicInterface.SaleController">
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <items>
+                <Button onAction="#selectCustomer" text="Selecionar" />
+            </items>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </ToolBar>
+        <TableView fx:id="tableSaleCustomer" prefHeight="314.0" prefWidth="420.0">
+            <columns>
+                <TableColumn fx:id="tableColumnSaleCustomerCpf" prefWidth="75.0" text="CPF" />
+                <TableColumn fx:id="tableColumnSaleCustomerName" prefWidth="150.0" text="Nome" />
+                <TableColumn fx:id="tableColumnSaleCustomerEmail" prefWidth="150.0" text="E-Mail" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>
